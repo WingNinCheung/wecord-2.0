@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { getAllServers, updateServer } from "../../store/servers";
 import { getServerChannelsThunk } from "../../store/channel";
 import { getChannelMessagesThunk } from "../../store/messages";
+import Channels from "./channel/index";
+
 import "./HomePage.css";
 
 function HomePage() {
@@ -33,11 +35,11 @@ function HomePage() {
   const [mainServer, setMainServer] = useState(false);
   const [selectedServerId, setSelectedServerId] = useState(1);
   const [adminId, setAdminId] = useState(1);
-  const [goToChannel, setGoToChannels] = useState(false);
-  const [openChannels, setOpenChannels] = useState(false);
-  const [selectedChannelId, setSelectedChannelId] = useState(1);
-  const [showChannelMessages, setShowChannelMessages] = useState(false);
-  const [goToChannelMessages, setGoToChannelsMessages] = useState(false);
+  // const [goToChannel, setGoToChannels] = useState(false);
+  // const [openChannels, setOpenChannels] = useState(false);
+  // const [selectedChannelId, setSelectedChannelId] = useState(1);
+  // const [showChannelMessages, setShowChannelMessages] = useState(false);
+  // const [goToChannelMessages, setGoToChannelsMessages] = useState(false);
   const history = useHistory();
 
   // right-click menu section
@@ -102,12 +104,15 @@ function HomePage() {
     e.preventDefault();
     setShow(true);
   };
-  // const handleUserClick = (e) => {
-  //     e.preventDefault();
-  //     setAdminId(server.master_admin)
-  //     console.log(adminId)
 
-  // }
+  // const channelSetter = (e) => {
+  //   // setSelectedChannelId(channel.id);
+  //   // console.log("Here", e.target.value);
+  //   const channelId = e.target.value;
+  //   setSelectedChannelId(channelId);
+  //   setShowChannelMessages(true);
+  //   setGoToChannelsMessages(true);
+  // };
 
   // left click anywhere will make the right-click menu disappear
   useEffect(() => {
@@ -129,37 +134,37 @@ function HomePage() {
   // -------------------------------------------------
 
   // Read all channels of a server  ------ working
-  const loadChannel = async () => {
-    if (goToChannel) {
-      const result = await dispatch(getServerChannelsThunk(selectedServerId));
-      console.log("result:", result);
-      setGoToChannels(false);
-    }
-  };
+  // const loadChannel = async () => {
+  //   if (goToChannel) {
+  //     const result = await dispatch(getServerChannelsThunk(selectedServerId));
+  //     console.log("result:", result);
+  //     setGoToChannels(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    loadChannel();
-  }, [dispatch, goToChannel]);
+  // useEffect(() => {
+  //   loadChannel();
+  // }, [dispatch, goToChannel]);
 
-  const allChannels = useSelector((state) => state.channel);
-  const serverChannels = Object.values(allChannels);
+  // const allChannels = useSelector((state) => state.channel);
+  // const serverChannels = Object.values(allChannels);
 
   //----------------------------------------------------
 
   // READ ALL MESSAGES OF A SINGLE CHANNEL
-  const channelMessages = useSelector((state) => state.messages);
-  const channelMessagesArr = Object.values(channelMessages);
+  // const channelMessages = useSelector((state) => state.messages);
+  // const channelMessagesArr = Object.values(channelMessages);
 
-  const LoadChannelMessages = async () => {
-    if (goToChannelMessages) {
-      const result = await dispatch(getChannelMessagesThunk(selectedChannelId));
-      setGoToChannelsMessages(false);
-    }
-  };
+  // const LoadChannelMessages = async () => {
+  //   if (goToChannelMessages) {
+  //     const result = await dispatch(getChannelMessagesThunk(selectedChannelId));
+  //     setGoToChannelsMessages(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    LoadChannelMessages();
-  }, [dispatch, goToChannelMessages]);
+  // useEffect(() => {
+  //   LoadChannelMessages();
+  // }, [dispatch, goToChannelMessages]);
 
   // ------------------------------------------------
 
@@ -193,10 +198,10 @@ function HomePage() {
                         setMainServer(true);
                         setSelectedServerId(server.id);
                         setAdminId(server.master_admin);
-                        setOpenChannels(true);
-                        setGoToChannels(true);
-                        setGoToChannelsMessages(false);
-                        setShowChannelMessages(false);
+                        // setOpenChannels(true);
+                        // setGoToChannels(true);
+                        // setGoToChannelsMessages(false);
+                        // setShowChannelMessages(false);
                       }}
                     >
                       {server.name}
@@ -206,14 +211,6 @@ function HomePage() {
               ))}
             {show && <Menu x={location.y} y={location.x} />}
           </ul>
-          {/* <ul>
-                    {publicServers &&
-                        publicServers.map((server) => (
-                            <li key={server.id}>
-                                <button onClick={handleUserClick}>{server.name}</button>
-                            </li>
-                        ))}
-                </ul> */}
         </div>
 
         <div className="privateServers">
@@ -228,9 +225,9 @@ function HomePage() {
                       setMainServer(true);
                       setSelectedServerId(server.id);
                       setName(server.name);
-                      setOpenChannels(true);
-                      setGoToChannels(true);
-                      setShowChannelMessages(false);
+                      // setOpenChannels(true);
+                      // setGoToChannels(true);
+                      // setShowChannelMessages(false);
                     }}
                   >
                     {server.name}
@@ -240,27 +237,26 @@ function HomePage() {
           </ul>
         </div>
 
-        <div className="serverChannels">
+        {/* <div className="serverChannels">
           <h3>Channels</h3>
           {openChannels ? (
             <div>
               <ul className="channelsDisplay">
                 {serverChannels &&
                   serverChannels.map((channel) => (
-                    // <li key={channel.id}>
-                    //     <button onClick={handleChannelClick}>{channel.title}</button>
-                    // </li>
                     <li key={channel.id}>
                       <div>
                         <i class="fa-solid fa-hashtag"></i>
                       </div>
                       <button
                         className="singleChannelDisplay"
-                        onClick={() => {
-                          setSelectedChannelId(channel.id);
-                          setShowChannelMessages(true);
-                          setGoToChannelsMessages(true);
-                        }}
+                        value={channel.id}
+                        onClick={(e) =>
+                          // setSelectedChannelId(channel.id);
+                          // setShowChannelMessages(true);
+                          // setGoToChannelsMessages(true);
+                          channelSetter(e)
+                        }
                       >
                         {channel.title}
                       </button>
@@ -271,9 +267,11 @@ function HomePage() {
           ) : (
             <div> </div>
           )}
-        </div>
+        </div> */}
 
-        <div className="messagesContainer">
+        <Channels serverId={selectedServerId} />
+
+        {/* <div className="messagesContainer">
           <h3>messages</h3>
           {showChannelMessages ? (
             <div>
@@ -291,7 +289,7 @@ function HomePage() {
           ) : (
             <div> </div>
           )}
-        </div>
+        </div> */}
 
         <div className="userLists"></div>
       </div>
