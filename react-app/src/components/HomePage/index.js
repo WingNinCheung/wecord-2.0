@@ -14,6 +14,7 @@ import {
 
 import CreateChannel from "./Channel/createChannel";
 import EditChannel from "./Channel/editChannel";
+import Channel from "./Channel/index";
 
 import {
   getAllServerUsers,
@@ -29,21 +30,21 @@ import Chat from "./Chat/Chat";
 function HomePage() {
   const dispatch = useDispatch();
   const sessionUser = useSelector((state) => state.session.user);
-  // use this for getting members for private convos
-  // const serverUsers = useSelector((state) => state.serverUsers);
   const loggedInUserId = sessionUser.id;
 
   useEffect(() => {
     dispatch(getAllUsers());
   }, [dispatch]);
 
-  // READ ALL PUBLIC AND PRIVATE SERVERS -------- working
+  // READ ALL PUBLIC AND PRIVATE SERVERS --------
   const allServers = useSelector((state) => state.servers);
-  let allServersArray;
-  if (allServers.allServers)
+
+  let publicServers, privateServers, allServersArray, defaultSelectedServerId;
+
+  if (allServers.allServers) {
     allServersArray = Object.values(allServers.allServers);
-  let publicServers;
-  let defaultSelectedServerId;
+  }
+
   if (publicServers) {
     defaultSelectedServerId = publicServers[0];
     if (defaultSelectedServerId) {
@@ -51,7 +52,6 @@ function HomePage() {
     }
   }
 
-  let privateServers;
   if (allServers.yourServers) {
     privateServers = allServers.yourServers.filter((server) => {
       if (server.private === true) return server;
@@ -64,14 +64,11 @@ function HomePage() {
     );
   }
 
-  // console.log("public is ", publicServers);
-  // console.log("all is ", allServers);
-
   useEffect(() => {
     dispatch(getAllServers(loggedInUserId));
   }, [dispatch]);
 
-  // EDIT SERVER - may use modal to refactor it  ------working
+  // EDIT SERVER - may use modal to refactor it
   const [name, setName] = useState("");
   const [validationErrors, setValidationErrors] = useState([]);
   const [mainServer, setMainServer] = useState(false);
@@ -240,7 +237,6 @@ function HomePage() {
     setMainServer(false);
     setEdit(false);
     await dispatch(getAllServers(loggedInUserId));
-    // history.push("/home");
   };
 
   const handleCancel = (e) => {
@@ -374,7 +370,9 @@ function HomePage() {
             <form onSubmit={handleSubmit}>
               <ul>
                 {validationErrors.map((error) => (
-                  <li key={error} className="error">{error}</li>
+                  <li key={error} className="error">
+                    {error}
+                  </li>
                 ))}
               </ul>
               <input
@@ -396,11 +394,10 @@ function HomePage() {
           </div>
         )}
       </div>
+
       <div className="outContainer">
         {isPublic && (
           <div className="publicServers">
-            {/* {isPublic && <button className='switchbutton' onClick={() => setIsPublic(!isPublic)}>Friends</button>}
-          {!isPublic && <button className='switchbutton' onClick={() => setIsPublic(!isPublic)}>Servers</button>} */}
             <h3>Servers</h3>
             {isPublic && (
               <button
@@ -458,7 +455,6 @@ function HomePage() {
             </ul>
           </div>
         )}
-
         {!isPublic && (
           <div className="privateServers">
             {isPublic && (
@@ -478,7 +474,6 @@ function HomePage() {
                 Servers
               </button>
             )}
-            {/* <h3>Direct Messages</h3> */}
             <ul className="privateServersDisplay">
               {privateServers &&
                 privateServers.map((server) => (
@@ -499,73 +494,35 @@ function HomePage() {
             </ul>
           </div>
         )}
-        <>
-          <div className="serverChannels">
-            <h3>Channels</h3>
-            {adminId === loggedInUserId && selectedServerId && (
-              <CreateChannel
-                props={{ serverId: selectedServerId, loadChannel }}
-              />
-            )}
-            {openChannels ? (
-              <div>
-                <ul className="channelsDisplay">
-                  {serverChannels &&
-                    serverChannels.map((channel) => (
-                      <div
-                        key={channel.id}
-                        onContextMenu={(e) => {
-                          handleContextMenuChannel(e);
-                          setLocation({ x: e.pageX, y: e.pageY });
-                          setSelectedChannelId(channel.id);
-                          setChannelName(channel.title);
-                        }}
-                      >
-                        <li key={channel.id} value={channel.serverId}>
-                          <span>
-                            <button
-                              className="singleChannelDisplay highlight-dark"
-                              onClick={() => {
-                                setSelectedChannelId(channel.id);
-                                setShowChannelMessages(true);
-                                setGoToChannelsMessages(true);
-                              }}
-                            >
-                              {`# ${channel.title}`}
-                            </button>
-                          </span>
-                        </li>
-                      </div>
-                    ))}
-                  {channelShow && <ChannelMenu x={location.y} y={location.x} />}
-                </ul>
-              </div>
-            ) : selectedServerId ? (
-              <div>
-                <button onClick={handleJoin} className="joinServerBtn">
-                  Join Server
-                </button>
-              </div>
-            ) : (
-              <div></div>
-            )}
 
-            {editChannel && (
-              <EditChannel
-                serverId={selectedServerId}
-                channelId={selectedChannelId}
-                setEdit={setEditChannel}
-                channelTitle={channelName}
-                loadChannel={loadChannel}
-              />
-            )}
-          </div>
-        </>
+        {/* ----------Here is channel ----------*/}
+        <Channel
+          adminId={adminId}
+          loggedInUserId={loggedInUserId}
+          selectedServerId={selectedServerId}
+          loadChannel={loadChannel}
+          openChannels={openChannels}
+          serverChannels={serverChannels}
+          handleContextMenuChannel={handleContextMenuChannel}
+          setLocation={setLocation}
+          setSelectedChannelId={setSelectedChannelId}
+          setChannelName={setChannelName}
+          setShowChannelMessages={setShowChannelMessages}
+          setGoToChannelsMessages={setGoToChannelsMessages}
+          channelShow={channelShow}
+          ChannelMenu={ChannelMenu}
+          editChannel={editChannel}
+          selectedChannelId={selectedChannelId}
+          setEdit={setEdit}
+          channelName={channelName}
+          location={location}
+          handleJoin={handleJoin}
+        />
+        {/* ----------channel done ----------*/}
 
         <div className="messagesContainer">
           {showChannelMessages && <Chat channelId={selectedChannelId} />}
         </div>
-
         <div className="userLists">
           <h3>Members</h3>
           <Member serverId={selectedServerId} />
