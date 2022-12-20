@@ -1,8 +1,24 @@
 import CreateChannel from "./createChannel";
 import EditChannel from "./createChannel";
 import HomePage from "../index";
+import { useDispatch, useSelector } from "react-redux";
+import { getServerChannelsThunk } from "../../../store/channel";
+import { useEffect, useState } from "react";
 
 function Channel(props) {
+  const dispatch = useDispatch();
+  const loadChannel = async () => {
+    await dispatch(getServerChannelsThunk(props.selectedServerId));
+    props.setGoToChannels(false);
+  };
+
+  useEffect(() => {
+    if (props.defaultSelectedServerId) loadChannel();
+  }, [dispatch, props.goToChannel]);
+
+  const allChannels = useSelector((state) => state.channel);
+  const serverChannels = Object.values(allChannels);
+
   return (
     <div className="serverChannels">
       <h3>Channels</h3>
@@ -17,8 +33,8 @@ function Channel(props) {
       {props.openChannels ? (
         <div>
           <ul className="channelsDisplay">
-            {props.serverChannels &&
-              props.serverChannels.map((channel) => (
+            {serverChannels &&
+              serverChannels.map((channel) => (
                 <div
                   key={channel.id}
                   onContextMenu={(e) => {

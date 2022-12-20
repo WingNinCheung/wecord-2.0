@@ -19,8 +19,7 @@ server_routes = Blueprint("server_routes", __name__)
 def all_servers(userId):
     # get all server_user instances for a single user
     serverUsers = Server_User.query.filter(Server_User.userId == userId).all()
-    #print('--------------------------------- server Users',serverUsers)
-    #print('$$$$$$$$$$$$$$$$$$$############ each server',{'server': [server.server.to_dict() for server in serverUsers]})
+
     # Get user object for current user
     currentUser = User.query.get(userId)
     # get all servers, fill notIn with servers the user is not a member of
@@ -30,7 +29,6 @@ def all_servers(userId):
     for server in serverspub:
         bool = True
         for use in server.users:
-            print(use.user, currentUser)
             if currentUser == use.user:
                 bool = False
         if bool:
@@ -55,12 +53,14 @@ def all_servers(userId):
     #             yourServer["conversation_partners"].append(user.user.username)
     #             yourservers.append(yourServer)
 
-
-
     # we also want to send the server_users for each server to the state.
-    print('allnotin@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@',notIn)
+
     # return {"servers": [server.to_dict() for server in servers], 'yourservers': yourservers, 'serversnotin': [server.to_dict() for server in notIn]}
-    return {"servers": [server.to_dict() for server in servers], 'yourservers': [server.server.to_dict() for server in serverUsers], 'serversnotin': [server.to_dict() for server in notIn]}
+    return {
+        "servers": [server.to_dict() for server in servers],
+        "yourservers": [server.server.to_dict() for server in serverUsers],
+        "serversnotin": [server.to_dict() for server in notIn],
+    }
 
 
 # POST /api/servers - create a new public server
@@ -128,14 +128,16 @@ def delete_server(serverId, userId):
         return jsonify({"Only the server admin may delete this server"})
 
 
-@server_routes.route('/private/<int:userId>')
+@server_routes.route("/private/<int:userId>")
 def checkUserInServer(userId):
     serverUsers = Server_User.query.filter(Server_User.userId == userId).all()
-    print('$$$$$$$$$$$$$$$$$$$############',serverUsers)
-    print('$$$$$$$$$$$$$$$$$$$############',{'server': [server.server.to_dict() for server in serverUsers]})
+    print("$$$$$$$$$$$$$$$$$$$############", serverUsers)
+    print(
+        "$$$$$$$$$$$$$$$$$$$############",
+        {"server": [server.server.to_dict() for server in serverUsers]},
+    )
 
-    return {'yourservers': [server.server.to_dict() for server in serverUsers]}
-
+    return {"yourservers": [server.server.to_dict() for server in serverUsers]}
 
 
 # ------------------------- Routes for channels -------------------------------------

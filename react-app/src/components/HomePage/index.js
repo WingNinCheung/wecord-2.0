@@ -34,6 +34,7 @@ function HomePage() {
 
   useEffect(() => {
     dispatch(getAllUsers());
+    dispatch(getAllServers(loggedInUserId));
   }, [dispatch]);
 
   // READ ALL PUBLIC AND PRIVATE SERVERS --------
@@ -64,10 +65,6 @@ function HomePage() {
     );
   }
 
-  useEffect(() => {
-    dispatch(getAllServers(loggedInUserId));
-  }, [dispatch]);
-
   // EDIT SERVER - may use modal to refactor it
   const [name, setName] = useState("");
   const [validationErrors, setValidationErrors] = useState([]);
@@ -75,6 +72,7 @@ function HomePage() {
   const [selectedServerId, setSelectedServerId] = useState(
     defaultSelectedServerId
   );
+  console.log("server id:,", selectedServerId);
   const [adminId, setAdminId] = useState();
   const [goToChannel, setGoToChannels] = useState(false);
   const [openChannels, setOpenChannels] = useState(true);
@@ -99,7 +97,6 @@ function HomePage() {
   const handleDelete = async (e) => {
     e.preventDefault();
     await dispatch(deleteChannelThunk(selectedServerId, selectedChannelId));
-    await loadChannel();
     setShowChannelMessages(false);
   };
   const handleDeleteServer = async (e) => {
@@ -113,13 +110,12 @@ function HomePage() {
     setUserIsInServer(false);
     setSelectedServerId("");
     setOpenChannels(false);
-    // checkUserinServer(selectedServerId);
   };
 
   const checkUserinServer = async (serverId) => {
+    let userInServer = false;
     const data = await dispatch(getAllServerUsers(serverId));
     await dispatch(getServerChannelsThunk(serverId));
-    let userInServer = false;
 
     for (let i of data) {
       if (i.user.id == loggedInUserId) {
@@ -140,7 +136,6 @@ function HomePage() {
       setGoToChannelsMessages(false);
       setShowChannelMessages(false);
       setUserIsInServer(false);
-
       return false;
     }
   };
@@ -245,12 +240,13 @@ function HomePage() {
     history.push("/home");
   };
 
+  // Right-click menu for server
   const handleContextMenu = (e) => {
     e.preventDefault();
     setShow(true);
     setChannelShow(false);
   };
-
+  // Right-click menu for channel
   const handleContextMenuChannel = (e) => {
     e.preventDefault();
     setChannelShow(true);
@@ -263,32 +259,28 @@ function HomePage() {
       setShow(false);
       setChannelShow(false);
     };
-
     window.addEventListener("click", handleClick);
-
     return () => window.removeEventListener("click", handleClick);
   }, []);
 
+  // Error handler for empty server name when creating new servers
   useEffect(() => {
     const errors = [];
-
     if (!name.length) {
       errors.push("Server name cannot be empty!");
     }
     setValidationErrors(errors);
   }, [name]);
 
-  // -------------------------------------------------
+  // Read all channels of a server
+  // const loadChannel = async () => {
+  //   await dispatch(getServerChannelsThunk(selectedServerId));
+  //   setGoToChannels(false);
+  // };
 
-  // Read all channels of a server  ------ working
-  const loadChannel = async () => {
-    const result = await dispatch(getServerChannelsThunk(selectedServerId));
-    setGoToChannels(false);
-  };
-
-  useEffect(() => {
-    if (defaultSelectedServerId) loadChannel();
-  }, [dispatch, goToChannel]);
+  // useEffect(() => {
+  //   if (defaultSelectedServerId) loadChannel();
+  // }, [dispatch, goToChannel]);
 
   const allChannels = useSelector((state) => state.channel);
   const serverChannels = Object.values(allChannels);
@@ -343,7 +335,6 @@ function HomePage() {
     e.preventDefault();
     await dispatch(leaveServer(loggedInUserId, selectedServerId));
     await checkUserinServer(selectedServerId);
-    // await dispatch(getAllServers(loggedInUserId));
   };
 
   // -----------------------------------------------
@@ -500,9 +491,7 @@ function HomePage() {
           adminId={adminId}
           loggedInUserId={loggedInUserId}
           selectedServerId={selectedServerId}
-          loadChannel={loadChannel}
           openChannels={openChannels}
-          serverChannels={serverChannels}
           handleContextMenuChannel={handleContextMenuChannel}
           setLocation={setLocation}
           setSelectedChannelId={setSelectedChannelId}
@@ -517,11 +506,19 @@ function HomePage() {
           channelName={channelName}
           location={location}
           handleJoin={handleJoin}
+          defaultSelectedServerId={defaultSelectedServerId}
+          goToChannel={goToChannel}
         />
         {/* ----------channel done ----------*/}
 
         <div className="messagesContainer">
-          {showChannelMessages && <Chat channelId={selectedChannelId} />}
+          {showChannelMessages && (
+            <Chat
+              channelId={selectedChannelId}
+              LoadChannelMessages={LoadChannelMessages}
+              goToChannelMessages={goToChannelMessages}
+            />
+          )}
         </div>
         <div className="userLists">
           <h3>Members</h3>

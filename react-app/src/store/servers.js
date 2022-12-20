@@ -4,14 +4,14 @@ const GET_ALL_SERVERS = "servers/GET_PUBLIC_SERVERS";
 const CREATE_SERVER = "servers/CREATE_SERVER";
 const UPDATE_SERVER = "servers/UPDATE_SERVER";
 const DELETE_SERVER = "servers/DELETE_SERVER";
-const GET_YOURS = 'sersefsedzfesaf'
+const GET_YOURS = "sersefsedzfesaf";
 
 const getYourServers = (servers) => {
   return {
     type: GET_YOURS,
-    servers
-  }
-}
+    servers,
+  };
+};
 
 const loadAllServers = (servers) => {
   return {
@@ -19,13 +19,6 @@ const loadAllServers = (servers) => {
     servers,
   };
 };
-
-// const loadOneServer = (server) => {
-//   return {
-//     type: GET_ONE_SERVER,
-//     server
-//   }
-// }
 
 const addServer = (server) => {
   return {
@@ -50,13 +43,13 @@ const delServer = (serverToDelete) => {
 
 //get all your servers
 export const getAllYourServersThunk = (userId) => async (dispatch) => {
-  const res = await fetch(`/api/servers/private/${userId}`)
+  const res = await fetch(`/api/servers/private/${userId}`);
   if (res.ok) {
-    const data = await res.json()
-    dispatch(getYourServers(data))
-    return data
+    const data = await res.json();
+    dispatch(getYourServers(data));
+    return data;
   }
-}
+};
 
 // Get all
 export const getAllServers = (userId) => async (dispatch) => {
@@ -120,12 +113,12 @@ const servers = (state = {}, action) => {
   let newState = {};
   switch (action.type) {
     case GET_ALL_SERVERS:
-      allServers.allServers = {}
+      allServers.allServers = {};
       action.servers.servers.forEach((server) => {
         allServers.allServers[server.id] = server;
       });
-      allServers['yourServers'] = action.servers.yourservers
-      allServers['notIn'] = action.servers.serversnotin
+      allServers["yourServers"] = action.servers.yourservers;
+      allServers["notIn"] = action.servers.serversnotin;
       return allServers;
     case CREATE_SERVER:
       if (!state[action.server.id]) {

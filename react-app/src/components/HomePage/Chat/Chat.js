@@ -13,31 +13,36 @@ import EditFormModal from "../../auth/EditMessageModal";
 // initialize socket variable
 let socket;
 
-export default function Chat({ channelId }) {
-  //TODO: double check that this is the user
+export default function Chat({
+  channelId,
+  LoadChannelMessages,
+  goToChannelMessages,
+}) {
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.session.user);
   const oldMessages = useSelector((state) => state.messages);
-
-  const dispatch = useDispatch();
+  let errors = [];
+  console.log("1", oldMessages);
 
   // user messages
   const [messages, setMessages] = useState([]);
   // controlled form input
   const [chatInput, setChatInput] = useState("");
-  let errors = [];
 
   const [validationErrors, setValidationErrors] = useState([]);
-
   const [openEditForm, setOpenEditForm] = useState(false);
   const [messageId, setMessageId] = useState("");
   const [messageUserId, setMessageUserId] = useState("");
-
   const [deleteStatus, setDeleteStatus] = useState(false);
-
+  console.log("channel id:", channelId, messages);
   const loadAllMessages = async () => {
     await dispatch(getChannelMessagesThunk(channelId));
-    await setMessages(Object.values(oldMessages));
+    setMessages(Object.values(oldMessages));
   };
+
+  useEffect(() => {
+    LoadChannelMessages();
+  }, [dispatch, channelId, goToChannelMessages]);
 
   useEffect(() => {
     if (deleteStatus) {
@@ -46,12 +51,21 @@ export default function Chat({ channelId }) {
     setDeleteStatus(false);
   }, [dispatch, deleteStatus]);
 
-  //   Run messages load here on page load:
   useEffect(() => {
     if (oldMessages) {
+      // dispatch(getChannelMessagesThunk(channelId));
+      // setMessages(Object.values(oldMessages));
       loadAllMessages();
     }
+    loadAllMessages();
   }, [socket, openEditForm]);
+
+  useEffect(async () => {
+    console.log("old is ", oldMessages, channelId);
+    LoadChannelMessages();
+    await dispatch(getChannelMessagesThunk(channelId));
+    setMessages(Object.values(oldMessages));
+  }, [socket, channelId, goToChannelMessages]);
 
   // Run socket stuff (so connect/disconnect ) whenever channelId changes
   useEffect(() => {
@@ -62,16 +76,16 @@ export default function Chat({ channelId }) {
       socket.emit("join", { username: user.username, channelId: channelId });
     });
 
-    // listen for chat events (chat parameter is an event)
+    // listen for chat events
     socket.on("chat", (chat) => {
       // when we receive a chat, add to our messages array in state
       setMessages((messages) => [...messages, chat]);
     });
 
-    // listen for edited messages (oldMessage is the edited one)
+    // listen for edited messages
     socket.on("edit", (updatedMessages) => {
       // when we receive a chat, add to our messages array in state
-
+      // to do here!!!!!!!!!!!!!!!!!!!!!!!
       // trigger rerender useeffect
       setOpenEditForm(false);
 
@@ -82,8 +96,6 @@ export default function Chat({ channelId }) {
 
     // disconnect upon component unmount
     return () => {
-      // note: I don't think leave is necessary cuz disconnect leaves all rooms but this is just for
-      // logging when ppl leave for now
       socket.emit("leave", { username: user.username, channelId: channelId });
       socket.disconnect();
     };
@@ -93,12 +105,8 @@ export default function Chat({ channelId }) {
     setChatInput(e.target.value);
   };
 
-  // console.log("messages are ", messages);
-  // console.log("redux msg is ", oldMessages);
-
   const sendChat = async (e) => {
     e.preventDefault();
-    // emit a message
 
     // last object value tells database to edit message or not
     if (chatInput.trim() !== "") {
@@ -122,59 +130,62 @@ export default function Chat({ channelId }) {
           channelId: channelId,
         });
       }
-      // we seem to be grabbing the correct info
     }
     setOpenEditForm(false);
     setChatInput("");
   };
 
-  useEffect(() => {
-    if (chatInput.trim().length === 0) {
-      errors.push("Message cannot be empty");
-    }
-    setValidationErrors(errors);
-  }, [chatInput]);
+  // useEffect(() => {
+  //   if (chatInput.trim().length === 0) {
+  //     errors.push("Message cannot be empty");
+  //   }
+  //   setValidationErrors(errors);
+  // }, [chatInput]);
 
-  if (!oldMessages || !channelId || !socket) {
-    return <p className="loading">Loading</p>;
-  }
+  // if (!oldMessages || !channelId || !socket) {
+  //   return <p className="loading">Loading</p>;
+  // }
 
   return (
     <div className="container-message">
       <div className="messagesDisplay">
-        {messages.map((message, i) => (
-          <div key={i} className="singleMessageDisplay">
-            <div className="username">
-              <i className="fa-solid fa-user"></i>
-              {message.user}
-            </div>
-            <div className="msg-body">
-              <span className="message">{message.message}</span>
-            </div>
-            <div className="edit-del">
-              <span
-                onClick={() => {
-                  setMessageId(message.id);
-                  setOpenEditForm(true);
-                  setMessageUserId(message.userId);
-                }}
-              >
-                <i className="fa-solid fa-pen-to-square"></i>
-              </span>
-              <span>
+        {messages.length !== 0 ? (
+          messages.map((message, i) => (
+            <div key={i} className="singleMessageDisplay">
+              <div className="username">
+                <i className="fa-solid fa-user"></i>
+                {message.user}
+              </div>
+              <div className="msg-body">
+                <span className="message">{message.message}</span>
+              </div>
+              <div className="edit-del">
                 <span
                   onClick={() => {
                     setMessageId(message.id);
-                    setDeleteStatus(true);
+                    setOpenEditForm(true);
                     setMessageUserId(message.userId);
                   }}
                 >
-                  <i className="fa-solid fa-trash-can"></i>
+                  <i className="fa-solid fa-pen-to-square"></i>
                 </span>
-              </span>
+                <span>
+                  <span
+                    onClick={() => {
+                      setMessageId(message.id);
+                      setDeleteStatus(true);
+                      setMessageUserId(message.userId);
+                    }}
+                  >
+                    <i className="fa-solid fa-trash-can"></i>
+                  </span>
+                </span>
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        ) : (
+          <div>Loading...</div>
+        )}
 
         <div className="message-form form">
           <div className="createMessageForm">

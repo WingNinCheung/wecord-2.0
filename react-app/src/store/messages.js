@@ -38,7 +38,6 @@ const deleteChannelMessage = (message) => {
 //get
 export const getChannelMessagesThunk = (channelId) => async (dispatch) => {
   const res = await fetch(`/api/servers/channels/${channelId}`);
-  // const res = await fetch(`/api/servers/${serverId}/${channelId}`)
 
   if (res.ok) {
     const channelMessages = await res.json();
