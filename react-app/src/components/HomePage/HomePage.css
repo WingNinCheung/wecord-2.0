@@ -64,9 +64,10 @@ body {
   flex-direction: column;
   align-items: center;
   background-color: #202225;
-  /* overflow: hidden; */
   min-height: 0;
   font-family: "Quicksand", sans-serif;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .noMsg {
@@ -133,6 +134,8 @@ body {
   border-top-left-radius: 0px;
   border-top-right-radius: 0px;
   align-items: center;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .channelsDisplay {

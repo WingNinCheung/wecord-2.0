@@ -333,8 +333,10 @@ function HomePage() {
 
   const handleLeave = async (e) => {
     e.preventDefault();
+    setSelectedServerId("");
     await dispatch(leaveServer(loggedInUserId, selectedServerId));
     await checkUserinServer(selectedServerId);
+    await dispatch(getAllServers(loggedInUserId));
   };
 
   // -----------------------------------------------
