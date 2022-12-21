@@ -38,9 +38,10 @@ const deleteChannelMessage = (message) => {
 //get
 export const getChannelMessagesThunk = (channelId) => async (dispatch) => {
   const res = await fetch(`/api/servers/channels/${channelId}`);
-
+  console.log("in store outside", res);
   if (res.ok) {
     const channelMessages = await res.json();
+    console.log("in store", channelMessages);
     dispatch(getChannelMessages(channelMessages));
     return res;
   }

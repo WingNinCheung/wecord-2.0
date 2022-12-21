@@ -3,6 +3,7 @@ from flask import request, jsonify
 import os
 from .models.db import db, Message, Channel
 from .api.server_routes import get_channel_messages
+
 # origins = [
 #     "http://wecord.herokuapp.com/",
 #     "https://wecord.herokuapp.com/"
@@ -12,10 +13,7 @@ from .api.server_routes import get_channel_messages
 #     origins="*"
 
 if os.environ.get("FLASK_ENV") == "production":
-    origins = [
-        "http://wecord.herokuapp.com",
-        "https://wecord.herokuapp.com"
-    ]
+    origins = ["http://wecord.herokuapp.com", "https://wecord.herokuapp.com"]
 else:
     origins = "*"
 
@@ -33,10 +31,12 @@ def test_connect():
     s = request.sid
     socketio.emit("-------WE HAVE CONNECTED!-------", s)
 
+
 # see when we disconnect
 @socketio.on("disconnect")
 def test_disconnect():
     socketio.emit("----WE HAVE DISCONNECTED!!!-------")
+
 
 # connect to chat
 @socketio.on("chat")
@@ -44,16 +44,14 @@ def handle_chat(data):
     # broadcast=True means that all users connected to this chat will see the message
 
     # add NEW message to the database
-    print("------------- New Message ------------------")
     message = Message(
-        userId=data["userId"],
-        channelId=data["channelId"],
-        message=data["message"]
+        userId=data["userId"], channelId=data["channelId"], message=data["message"]
     )
 
     db.session.add(message)
     db.session.commit()
     socketio.emit("chat", data, broadcast=True)
+
 
 @socketio.on("edit")
 def handle_edit(data):
@@ -78,6 +76,7 @@ def handle_edit(data):
     else:
         socketio.send({"Only the message author may edit this message"})
 
+
 # join a chatroom
 @socketio.on("join")
 def on_join(data):
@@ -85,11 +84,12 @@ def on_join(data):
     # let's get room name by channelId
     channel = Channel.query.get(data["channelId"])
 
-    username = data['username']
+    username = data["username"]
     room = channel.title
     join_room(room)
     # to=room means that only someone connected to this room can see what's happening here
     socketio.send(username + " has entered the room", to=room)
+
 
 # test to see if we can have a connection event
 # @socketio.on('connect')
@@ -97,25 +97,26 @@ def on_join(data):
 #     socketio.emit('my response', {'data': 'Connected'})
 
 # leave a chatroom
-@socketio.on('leave')
+@socketio.on("leave")
 def on_leave(data):
     channel = Channel.query.get(data["channelId"])
 
-    username = data['username']
+    username = data["username"]
     room = channel.title
     leave_room(room)
     socketio.send(username + " has left the channel.", to=room)
+
 
 #         // test emitting to that test room when chatting
 #         // io.to() <- add a room to an array, io._rooms
 #         socketio.to(channelName).emit("chat");
 
-#All clients are assigned a room when they connect, named with the session ID of the connection,
+# All clients are assigned a room when they connect, named with the session ID of the connection,
 # which can be obtained from request.sid.
 
-#Unlike with a Flask route handler, we will not need to have an actual return statement-
-#we send messages explicitly using emit or send functions.
+# Unlike with a Flask route handler, we will not need to have an actual return statement-
+# we send messages explicitly using emit or send functions.
 
-#https://flask-socketio.readthedocs.io/en/latest/getting_started.html#connection-events
+# https://flask-socketio.readthedocs.io/en/latest/getting_started.html#connection-events
 # check here if we need to work with authentication for messages (this is a way to provide
 # auth tokens with the messages)
