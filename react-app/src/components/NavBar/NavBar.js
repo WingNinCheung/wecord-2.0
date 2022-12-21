@@ -14,9 +14,8 @@ const NavBar = () => {
       {!sessionUser && (
         <>
           <NavLink className="splash-wecord" to="/" exact={true}>
-            Wecord
+            Wecord 2.0
           </NavLink>
-          <NavLink to="/">OKOK</NavLink>
           <div className="auth-button">
             <span>
               <LoginFormModal />
@@ -37,7 +36,7 @@ const NavBar = () => {
             to="/"
             exact={true}
           >
-            Wecord
+            Wecord 2.0
           </NavLink>
           <NavLink
             className="navlink navlink1 navbarli"

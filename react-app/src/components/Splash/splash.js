@@ -21,7 +21,7 @@ export default function Splash() {
               to="/home"
               exact={true}
             >
-              Go to Wecord
+              Back to Wecord 2.0
             </NavLink>
             <LogoutButton />
           </nav>
@@ -34,7 +34,7 @@ export default function Splash() {
               to="/"
               exact={true}
             >
-              Wecord
+              Wecord 2.0
             </NavLink>
             <div>
               <span className="splash-nav-items">
