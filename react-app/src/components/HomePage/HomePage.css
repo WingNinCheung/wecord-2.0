@@ -4,6 +4,7 @@
   display: flex;
   flex: 1 1 auto;
   margin: 0px;
+  overflow-y: scroll;
 }
 
 body {
@@ -88,6 +89,11 @@ body {
   align-items: center;
   background-color: #2b2d32;
   font-family: "Quicksand", sans-serif;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+.serverChannels::-webkit-scrollbar {
+  display: none;
 }
 
 .publicServersDisplay {
@@ -122,12 +128,13 @@ body {
 .channelsDisplay {
   list-style-type: none;
   width: 10%;
-  height: 100%;
+  height: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: #2b2d32;
   margin-left: 4rem;
+  /* overflow-x: scroll; */
 }
 
 .singleChannelDisplay {
@@ -135,12 +142,12 @@ body {
   display: flex;
   flex-direction: column;
   height: 2rem;
-  width: 5rem;
+  width: 8rem;
   margin: 1rem;
   background-color: #2b2d32;
   justify-content: space-evenly;
+  align-items: center;
   border: none;
-  overflow: hidden;
   cursor: pointer;
 }
 
