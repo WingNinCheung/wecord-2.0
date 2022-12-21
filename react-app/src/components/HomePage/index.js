@@ -333,8 +333,10 @@ function HomePage() {
 
   const handleLeave = async (e) => {
     e.preventDefault();
+    setSelectedServerId("");
     await dispatch(leaveServer(loggedInUserId, selectedServerId));
     await checkUserinServer(selectedServerId);
+    await dispatch(getAllServers(loggedInUserId));
   };
 
   // -----------------------------------------------
@@ -501,6 +503,7 @@ function HomePage() {
           channelShow={channelShow}
           ChannelMenu={ChannelMenu}
           editChannel={editChannel}
+          setEditChannel={setEditChannel}
           selectedChannelId={selectedChannelId}
           setEdit={setEdit}
           channelName={channelName}
