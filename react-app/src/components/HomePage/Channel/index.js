@@ -1,5 +1,5 @@
 import CreateChannel from "./createChannel";
-import EditChannel from "./createChannel";
+import EditChannel from "./editChannel";
 import HomePage from "../index";
 import { useDispatch, useSelector } from "react-redux";
 import { getServerChannelsThunk } from "../../../store/channel";
@@ -11,6 +11,7 @@ function Channel(props) {
     await dispatch(getServerChannelsThunk(props.selectedServerId));
     props.setGoToChannels(false);
   };
+  console.log("in channel", props.editChannel);
 
   useEffect(() => {
     if (props.defaultSelectedServerId) loadChannel();
@@ -26,7 +27,6 @@ function Channel(props) {
         <CreateChannel
           props={{
             serverId: props.selectedServerId,
-            loadChannel: props.loadChannel,
           }}
         />
       )}

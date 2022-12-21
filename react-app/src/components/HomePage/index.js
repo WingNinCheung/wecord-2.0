@@ -501,6 +501,7 @@ function HomePage() {
           channelShow={channelShow}
           ChannelMenu={ChannelMenu}
           editChannel={editChannel}
+          setEditChannel={setEditChannel}
           selectedChannelId={selectedChannelId}
           setEdit={setEdit}
           channelName={channelName}

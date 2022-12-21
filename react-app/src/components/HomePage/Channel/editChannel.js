@@ -2,7 +2,7 @@ import { useEffect, useState, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import { updateChannel } from "../../../store/channel";
+import { updateChannel, getServerChannelsThunk } from "../../../store/channel";
 
 export default function EditChannel({
   serverId,
@@ -13,7 +13,6 @@ export default function EditChannel({
 }) {
   const [title, setTitle] = useState("");
   const [validationErrors, setValidationErrors] = useState([]);
-  // const [hidden, setHidden] = useState(true);
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -21,8 +20,8 @@ export default function EditChannel({
   useEffect(() => {
     const errors = [];
 
-    if (!title.length) {
-      errors.push("Title cannot be empty");
+    if (title.length > 9) {
+      errors.push("Your name is more than 9 characters long!");
     }
     setValidationErrors(errors);
   }, [title]);
@@ -36,9 +35,8 @@ export default function EditChannel({
     };
 
     const newChannel = await dispatch(updateChannel(data, serverId, channelId));
-    await loadChannel();
+    await dispatch(getServerChannelsThunk(serverId));
     setEdit(false);
-    // history.push("/home");
   };
 
   const handleCancel = (e) => {
@@ -53,7 +51,9 @@ export default function EditChannel({
       <form className="create-form" onSubmit={handleSubmit}>
         <ul>
           {validationErrors.map((error) => (
-            <li key={error} className="error">{error}</li>
+            <li key={error} className="error">
+              {error}
+            </li>
           ))}
         </ul>
         <label>Title</label>
@@ -62,7 +62,10 @@ export default function EditChannel({
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         ></input>
-        <button className="edit-channel" disabled={validationErrors.length > 0}>
+        <button
+          className="edit-channel"
+          disabled={validationErrors.length > 0 || title.trim().length === 0}
+        >
           Edit channel
         </button>
         <button className="edit-channel" onClick={handleCancel}>

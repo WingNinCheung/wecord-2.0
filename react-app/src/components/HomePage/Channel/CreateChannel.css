@@ -41,8 +41,9 @@
 }
 
 .edit-channel:disabled:hover,
-.edit-channel[disabled] {
-  /* border: 1px solid #999999; */
+.edit-channel[disabled],
+.createChannelBtn:disabled:hover,
+.createChannelBtn[disabled] {
   background-color: #cccccc;
   color: #9e9797;
 }

@@ -22,8 +22,8 @@ export default function CreateChannel({ props }) {
       serverId: props.serverId,
     };
 
-    const newChannel = await dispatch(createChannel(data, props.serverId));
-    await props.loadChannel();
+    await dispatch(createChannel(data, props.serverId));
+    await dispatch(getServerChannelsThunk(props.serverId));
     setTitle("");
     setHidden(true);
   };
@@ -36,8 +36,8 @@ export default function CreateChannel({ props }) {
   useEffect(() => {
     const errors = [];
 
-    if (!title.length) {
-      errors.push("Channel name cannot be empty!");
+    if (title.length > 9) {
+      errors.push("Your name is more than 9 characters long!");
     }
     setValidationErrors(errors);
   }, [title]);
@@ -71,7 +71,12 @@ export default function CreateChannel({ props }) {
           className="inputChannel"
         ></input>
         <div>
-          <button className="createChannelBtn">Create</button>
+          <button
+            className="createChannelBtn"
+            disabled={validationErrors.length > 0 || title.trim().length === 0}
+          >
+            Create
+          </button>
           <button className="createChannelBtn" onClick={handleCancel}>
             Cancel
           </button>
