@@ -35,6 +35,7 @@ export default function Chat({
   const [messageUserId, setMessageUserId] = useState("");
   const [deleteStatus, setDeleteStatus] = useState(false);
   console.log("channel id:", channelId, messages);
+  // console.log("message id is ", messageId);
   const loadAllMessages = async () => {
     await dispatch(getChannelMessagesThunk(channelId));
     setMessages(Object.values(oldMessages));
@@ -44,12 +45,17 @@ export default function Chat({
     LoadChannelMessages();
   }, [dispatch, channelId, goToChannelMessages]);
 
+  // For deleting messages
   useEffect(() => {
+    // await setMessages(Object.values(oldMessages));
     if (deleteStatus) {
       dispatch(deleteMessageThunk(user.id, messageId));
+      // dispatch(getChannelMessagesThunk(channelId));
     }
+    // LoadChannelMessages();
+    // setMessages(Object.values(oldMessages));
     setDeleteStatus(false);
-  }, [dispatch, deleteStatus]);
+  }, [dispatch, deleteStatus, goToChannelMessages]);
 
   useEffect(() => {
     if (oldMessages) {
@@ -80,6 +86,8 @@ export default function Chat({
     socket.on("chat", (chat) => {
       // when we receive a chat, add to our messages array in state
       setMessages((messages) => [...messages, chat]);
+      // dispatch(getChannelMessagesThunk(channelId));
+      // setMessages(Object.values(oldMessages));
     });
 
     // listen for edited messages
@@ -174,6 +182,7 @@ export default function Chat({
                     onClick={() => {
                       setMessageId(message.id);
                       setDeleteStatus(true);
+                      // deleteMessage(message.id);
                       setMessageUserId(message.userId);
                     }}
                   >

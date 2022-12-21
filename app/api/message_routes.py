@@ -4,11 +4,6 @@ from ..models.db import Server_User, db, Server, Channel, Message
 
 message_routes = Blueprint("message_routes", __name__)
 
-
-# 1.) feed channelID & userId to backend to create message
-# or
-# 2.) send in request body
-
 # create message
 @message_routes.route("/", methods=["POST"])
 @login_required
