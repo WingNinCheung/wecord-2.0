@@ -43,14 +43,13 @@ export default function Chat({
   }, [dispatch, channelId, goToChannelMessages]);
 
   // For deleting messages
-  useEffect(() => {
-    // await setMessages(Object.values(oldMessages));
+  useEffect(async () => {
     if (deleteStatus) {
-      dispatch(deleteMessageThunk(user.id, messageId));
-      // dispatch(getChannelMessagesThunk(channelId));
+      await dispatch(deleteMessageThunk(user.id, messageId));
+      await dispatch(getChannelMessagesThunk(channelId));
     }
-    // LoadChannelMessages();
-    // setMessages(Object.values(oldMessages));
+    LoadChannelMessages();
+    setMessages(Object.values(oldMessages));
     setDeleteStatus(false);
   }, [dispatch, deleteStatus, goToChannelMessages]);
 
@@ -173,7 +172,6 @@ export default function Chat({
                     onClick={() => {
                       setMessageId(message.id);
                       setDeleteStatus(true);
-                      // deleteMessage(message.id);
                       setMessageUserId(message.userId);
                     }}
                   >
@@ -184,7 +182,7 @@ export default function Chat({
             </div>
           ))
         ) : (
-          <div>Loading...</div>
+          <div>No Messages Yet</div>
         )}
 
         <div className="message-form form">
