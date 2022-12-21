@@ -215,7 +215,7 @@ def delete_channel(serverId, channelId):
 def get_channel_messages(id):
     channel = Channel.query.get(id)
     target_channel = channel.to_dict()
-    print("***********************" * 30, channel)
+
     # use a for loop to append the corresponding username and photo to each message
     for i, message in enumerate(target_channel["messages"]):
         message["user"] = channel.messages[i].user.username

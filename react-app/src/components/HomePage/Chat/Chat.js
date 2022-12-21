@@ -20,12 +20,13 @@ export default function Chat({
 }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.session.user);
-  const oldMessages = useSelector((state) => state.messages);
+  let oldMessages = useSelector((state) => state.messages);
   let errors = [];
   console.log("1", oldMessages);
 
   // user messages
   const [messages, setMessages] = useState([]);
+  const [chatEvent, setChatEvent] = useState(false);
   // controlled form input
   const [chatInput, setChatInput] = useState("");
 
@@ -36,35 +37,21 @@ export default function Chat({
   const [deleteStatus, setDeleteStatus] = useState(false);
   console.log("channel id:", channelId, messages);
   // console.log("message id is ", messageId);
-  const loadAllMessages = async () => {
-    await dispatch(getChannelMessagesThunk(channelId));
-    setMessages(Object.values(oldMessages));
-  };
 
   useEffect(() => {
     LoadChannelMessages();
   }, [dispatch, channelId, goToChannelMessages]);
 
   // For deleting messages
-  useEffect(() => {
-    // await setMessages(Object.values(oldMessages));
+  useEffect(async () => {
     if (deleteStatus) {
-      dispatch(deleteMessageThunk(user.id, messageId));
-      // dispatch(getChannelMessagesThunk(channelId));
+      await dispatch(deleteMessageThunk(user.id, messageId));
+      await dispatch(getChannelMessagesThunk(channelId));
     }
-    // LoadChannelMessages();
-    // setMessages(Object.values(oldMessages));
+    LoadChannelMessages();
+    setMessages(Object.values(oldMessages));
     setDeleteStatus(false);
   }, [dispatch, deleteStatus, goToChannelMessages]);
-
-  useEffect(() => {
-    if (oldMessages) {
-      // dispatch(getChannelMessagesThunk(channelId));
-      // setMessages(Object.values(oldMessages));
-      loadAllMessages();
-    }
-    loadAllMessages();
-  }, [socket, openEditForm]);
 
   useEffect(async () => {
     console.log("old is ", oldMessages, channelId);
@@ -83,10 +70,13 @@ export default function Chat({
     });
 
     // listen for chat events
-    socket.on("chat", (chat) => {
+    socket.on("chat", async (chat) => {
       // when we receive a chat, add to our messages array in state
+
       setMessages((messages) => [...messages, chat]);
-      // dispatch(getChannelMessagesThunk(channelId));
+      setChatEvent(true);
+      console.log("old msg inside socket", oldMessages);
+      await dispatch(getChannelMessagesThunk(channelId));
       // setMessages(Object.values(oldMessages));
     });
 
@@ -182,7 +172,6 @@ export default function Chat({
                     onClick={() => {
                       setMessageId(message.id);
                       setDeleteStatus(true);
-                      // deleteMessage(message.id);
                       setMessageUserId(message.userId);
                     }}
                   >
@@ -193,7 +182,7 @@ export default function Chat({
             </div>
           ))
         ) : (
-          <div>Loading...</div>
+          <div>No Messages Yet</div>
         )}
 
         <div className="message-form form">

@@ -1,6 +1,6 @@
 from flask_socketio import SocketIO, join_room, leave_room
 from flask import request, jsonify
-import os
+import os, json
 from .models.db import db, Message, Channel
 from .api.server_routes import get_channel_messages
 
@@ -50,6 +50,8 @@ def handle_chat(data):
 
     db.session.add(message)
     db.session.commit()
+    new_MessageId = db.session.query(Message).order_by(Message.id.desc()).first()
+    data["id"] = new_MessageId.id
     socketio.emit("chat", data, broadcast=True)
 
 
