@@ -54,6 +54,20 @@ export default function Chat({
     messageEl.current?.scrollIntoView({ behaviour: "smooth" });
   }, [messages]);
 
+  // Allow users to press enter to send out messages
+  useEffect(() => {
+    const keyHandler = (event) => {
+      if (event.key === "Enter") {
+        sendChat(event);
+      }
+    };
+    document.addEventListener("keydown", keyHandler);
+
+    return () => {
+      document.removeEventListener("keydown", keyHandler);
+    };
+  });
+
   // Run socket stuff (so connect/disconnect ) whenever channelId changes
   useEffect(() => {
     // create websocket/connect
@@ -82,7 +96,6 @@ export default function Chat({
         (messages.find((msg) => msg.id == updatedID).message =
           updatedMessages.message),
       ]);
-      // await dispatch(getChannelMessagesThunk(channelId));
     });
 
     // disconnect upon component unmount
