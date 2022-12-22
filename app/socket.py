@@ -54,26 +54,25 @@ def handle_chat(data):
     data["id"] = new_MessageId.id
     socketio.emit("chat", data, broadcast=True)
 
+    print("*" * 30, data)
+
 
 @socketio.on("edit")
 def handle_edit(data):
     # data here is a single message
 
-    print("------------- Edit Mode ------------------")
     message = Message.query.get(data["messageId"])
-    print("-------------message text---------", data["message"])
-    print("-------------message.userId---------", message.userId)
 
     # doublecheck that the actual user is editing their own message
     if data["userId"] == message.userId:
-        print("------------- Passed user ID check ------------------")
 
         message.message = data["message"]
         db.session.commit()
 
         newMessages = get_channel_messages(data["channelId"])
 
-        socketio.emit("edit", newMessages, broadcast=True)
+        socketio.emit("edit", data, broadcast=True)
+        print("*" * 30, data)
 
     else:
         socketio.send({"Only the message author may edit this message"})
