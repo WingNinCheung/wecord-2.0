@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { io } from "socket.io-client";
 import {
   getChannelMessagesThunk,
-  createMessage,
-  editMessageThunk,
   deleteMessageThunk,
 } from "../../../store/messages";
-import EditMessageForm from "./editMessageForm";
 import EditFormModal from "../../auth/EditMessageModal";
 
 // initialize socket variable
@@ -21,21 +18,17 @@ export default function Chat({
   const dispatch = useDispatch();
   const user = useSelector((state) => state.session.user);
   let oldMessages = useSelector((state) => state.messages);
-  let errors = [];
-  console.log("1", oldMessages);
+  const messageEl = useRef(null);
 
   // user messages
   const [messages, setMessages] = useState([]);
   // controlled form input
   const [chatInput, setChatInput] = useState("");
-
   const [validationErrors, setValidationErrors] = useState([]);
   const [openEditForm, setOpenEditForm] = useState(false);
   const [messageId, setMessageId] = useState("");
   const [messageUserId, setMessageUserId] = useState("");
   const [deleteStatus, setDeleteStatus] = useState(false);
-  console.log("channel id:", channelId, messages);
-  // console.log("message id is ", messageId);
 
   useEffect(() => {
     LoadChannelMessages();
@@ -53,11 +46,13 @@ export default function Chat({
   }, [dispatch, deleteStatus, goToChannelMessages]);
 
   useEffect(async () => {
-    console.log("old is ", oldMessages, channelId);
-    // LoadChannelMessages();
     await dispatch(getChannelMessagesThunk(channelId));
-    // setMessages(Object.values(oldMessages));
   }, [socket, channelId, goToChannelMessages]);
+
+  // Auto scroll to bottom when new messages come in
+  useEffect(() => {
+    messageEl.current?.scrollIntoView({ behaviour: "smooth" });
+  }, [messages]);
 
   // Run socket stuff (so connect/disconnect ) whenever channelId changes
   useEffect(() => {
@@ -74,7 +69,6 @@ export default function Chat({
       console.log("fuck", chat);
       setMessages((messages) => [...messages, chat]);
       await dispatch(getChannelMessagesThunk(channelId));
-      // setMessages(Object.values(oldMessages));
     });
 
     // listen for edited messages
@@ -143,7 +137,6 @@ export default function Chat({
                   <i className="fa-solid fa-user"></i>
                   {message.user}
                 </div>
-
                 <div className="msg-body">
                   <span className="message">{message.message}</span>
                 </div>
@@ -170,6 +163,7 @@ export default function Chat({
                     </span>
                   </span>
                 </div>
+                <div ref={messageEl}></div>
               </div>
             ) : (
               <div></div>
@@ -178,45 +172,6 @@ export default function Chat({
         ) : (
           <div>No Messages Yet</div>
         )}
-
-        {/* <div className="message-form form">
-          <div className="createMessageForm">
-            {openEditForm ? (
-              <EditFormModal
-                messageId={messageId}
-                userId={user.id}
-                setShow={setOpenEditForm}
-                msgUserId={messageUserId}
-                chatInput={chatInput}
-                updateChatInput={updateChatInput}
-                sendChat={sendChat}
-              />
-            ) : (
-              <form onSubmit={sendChat}>
-                <ul>
-                  {validationErrors.map((error) => (
-                    <li key={error} className="error">
-                      {error}
-                    </li>
-                  ))}
-                </ul>
-                <textarea
-                  className="create-message"
-                  placeholder="Write messages here"
-                  value={chatInput}
-                  onChange={updateChatInput}
-                />
-                <button
-                  type="Submit"
-                  disabled={chatInput.trim().length === 0}
-                  className="send-button"
-                >
-                  Send
-                </button>
-              </form>
-            )}
-          </div>
-        </div> */}
       </div>
       <div className="message-form form">
         <div className="createMessageForm">
