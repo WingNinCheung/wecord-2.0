@@ -147,14 +147,15 @@ body {
   align-items: center;
   background-color: #2b2d32;
   margin-left: 4rem;
+  color: aqua;
 }
 
 .singleChannelDisplay {
-  color: white;
+  color: rgb(169, 166, 166);
   display: flex;
   flex-direction: column;
   height: 2rem;
-  width: 8rem;
+  width: 6rem;
   margin: 1rem;
   background-color: #2b2d32;
   justify-content: space-evenly;
@@ -163,14 +164,15 @@ body {
   cursor: pointer;
 }
 
-.singleChannelDisplay:hover {
+/* .singleChannelDisplay:hover {
   text-decoration: underline;
   font-size: large;
-}
+} */
 
 .highlight-dark:focus {
-  background-color: rgba(32, 34, 37, 0.4);
+  background-color: rgba(102, 105, 108, 0.4);
   opacity: 2;
+  color: white;
 }
 
 .singleServerDisplay {
@@ -186,11 +188,6 @@ body {
   border: none;
   overflow: hidden;
   cursor: pointer;
-}
-
-.singleServerDisplay:hover {
-  text-decoration: underline;
-  font-size: large;
 }
 
 .channelList {

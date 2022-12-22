@@ -8,7 +8,8 @@
   /* align-items: center; */
   background-color: #3a3c42;
   display: inline-grid;
-  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 .messagesDisplay {
@@ -86,16 +87,11 @@
   color: red;
   position: fixed;
   bottom: 0;
-}
-
-.edit-form {
-  width: 100px;
-  height: 100px;
-  /* position: fixed; */
+  width: 200px;
 }
 
 .create-message {
-  width: 68vw;
+  width: 68.8vw;
   height: 5vh;
   /* overflow-y: scroll; */
   background-color: #393a3e;
@@ -104,6 +100,12 @@
   z-index: 1;
   display: inline-grid;
   grid-template-columns: 1fr 1fr;
+}
+
+.edit-form {
+  width: 100px;
+  height: 100px;
+  /* position: fixed; */
 }
 
 .send-button {

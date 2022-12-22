@@ -179,7 +179,7 @@ export default function Chat({
           <div>No Messages Yet</div>
         )}
 
-        <div className="message-form form">
+        {/* <div className="message-form form">
           <div className="createMessageForm">
             {openEditForm ? (
               <EditFormModal
@@ -211,11 +211,49 @@ export default function Chat({
                   disabled={chatInput.trim().length === 0}
                   className="send-button"
                 >
-                  Post
+                  Send
                 </button>
               </form>
             )}
           </div>
+        </div> */}
+      </div>
+      <div className="message-form form">
+        <div className="createMessageForm">
+          {openEditForm ? (
+            <EditFormModal
+              messageId={messageId}
+              userId={user.id}
+              setShow={setOpenEditForm}
+              msgUserId={messageUserId}
+              chatInput={chatInput}
+              updateChatInput={updateChatInput}
+              sendChat={sendChat}
+            />
+          ) : (
+            <form onSubmit={sendChat}>
+              <ul>
+                {validationErrors.map((error) => (
+                  <li key={error} className="error">
+                    {error}
+                  </li>
+                ))}
+              </ul>
+              <textarea
+                className="create-message"
+                placeholder="Write messages here"
+                value={chatInput}
+                onChange={updateChatInput}
+              />
+              <button
+                type="Submit"
+                disabled={chatInput.trim().length === 0}
+                className="send-button"
+              >
+                Send
+              </button>
+            </form>
+          )}
         </div>
       </div>
     </div>
