@@ -153,6 +153,7 @@ export default function Chat({
                       setMessageId(message.id);
                       setOpenEditForm(true);
                       setMessageUserId(message.userId);
+                      setChatInput(message.message);
                     }}
                   >
                     <i className="fa-solid fa-pen-to-square"></i>

@@ -13,18 +13,12 @@ export default function EditMessageForm({
   sendChat,
   setShowModal,
 }) {
-  const dispatch = useDispatch();
-  const history = useHistory();
   const [validationErrors, setValidationErrors] = useState([]);
-
-  const allMessages = useSelector((state) => Object.values(state.messages));
-  const messageBody = allMessages.find((msg) => msg.id == messageId);
 
   const handleCancel = (e) => {
     e.preventDefault();
     setShow(false);
     setShowModal(true);
-    // history.push("/home");
   };
 
   useEffect(() => {
@@ -36,6 +30,9 @@ export default function EditMessageForm({
 
     if (!chatInput.trim().length) {
       errors.push("Message cannot be empty!");
+    }
+    if (chatInput.length >= 100) {
+      errors.push("Message must be less than 100 characters");
     }
     setValidationErrors(errors);
   }, [chatInput]);

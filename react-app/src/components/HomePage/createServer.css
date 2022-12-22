@@ -96,3 +96,9 @@
   margin-left: 20px;
   cursor: pointer;
 }
+
+.createButton:disabled:hover,
+.createButton[disabled] {
+  background-color: #cccccc;
+  color: #9e9797;
+}
