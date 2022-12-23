@@ -133,7 +133,7 @@ export default function Chat({
   };
 
   return (
-    <div className="container-message">
+    <div className="innerMsg">
       <div className="messagesDisplay">
         {messages.length !== 0 ? (
           messages.map((message, i) =>

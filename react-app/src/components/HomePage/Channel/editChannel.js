@@ -1,7 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { useParams } from "react-router-dom";
 import { updateChannel, getServerChannelsThunk } from "../../../store/channel";
 
 export default function EditChannel({

@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import LoginForm from "./components/auth/LoginForm";
-import SignUpForm from "./components/auth/SignUpForm";
 import NavBar from "./components/NavBar/NavBar";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import UsersList from "./components/HomePage/PublicServers/ServerList";
@@ -11,11 +8,10 @@ import User from "./components/User";
 import HomePage from "./components/HomePage";
 import { authenticate } from "./store/session";
 import CreateForm from "./components/HomePage/createServer";
-import EditServerForm from "./components/HomePage/updateServer";
+
 import CreateChannel from "./components/HomePage/Channel/createChannel";
 import Splash from "./components/Splash/splash";
 import FriendsList from "./components/friends/friends";
-import LoginFormModal from "./components/auth/LoginFormModal";
 
 function App() {
   const [loaded, setLoaded] = useState(false);

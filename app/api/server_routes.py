@@ -6,13 +6,6 @@ from ..models.user import User
 
 server_routes = Blueprint("server_routes", __name__)
 
-# # GET /api/servers/:serverId - read a single server
-# @server_routes.route('/<int:id>')
-# def single_server(id):
-#     print(id)
-#     server = Server.query.get(id)
-#     return server.to_dict()
-
 # GET /api/servers - read all servers
 @server_routes.route("/yourServers/<int:userId>")
 @login_required
@@ -34,28 +27,6 @@ def all_servers(userId):
         if bool:
             notIn.append(server)
 
-    # send the conversation partners of the current user- everyone else in the server
-    # send array of usernames
-
-    # yourservers = []
-    # # for each of the current user's servers
-    # for server in serverUsers:
-    #     # yourServer is a server instance in dictionary format
-    #     yourServer = server.server.to_dict()
-    #     yourServer["conversation_partners"] = []
-
-    #     users_in_each_server = server.server.users
-
-    #     # get the users in each of those servers and put their names into a list.
-    #     # exclude the current user's name
-    #     for user in users_in_each_server:
-    #         if currentUser.username not in user.user.username:
-    #             yourServer["conversation_partners"].append(user.user.username)
-    #             yourservers.append(yourServer)
-
-    # we also want to send the server_users for each server to the state.
-
-    # return {"servers": [server.to_dict() for server in servers], 'yourservers': yourservers, 'serversnotin': [server.to_dict() for server in notIn]}
     return {
         "servers": [server.to_dict() for server in servers],
         "yourservers": [server.server.to_dict() for server in serverUsers],
@@ -91,9 +62,6 @@ def new_server():
     return server.to_dict()
 
 
-# # POST /api/servers - create a new private server
-# # TODO: copy/paste public version once that's debugged
-
 # PUT /api/servers/:serverId - update server info
 @server_routes.route("/<int:id>/edit", methods=["PUT"])
 @login_required
@@ -109,14 +77,9 @@ def edit_server(id):
     return server.to_dict()
 
 
-# TODO: Fix front end route for this
 # DELETE /api/servers/:serverId - delete a server
 @server_routes.route("/<int:serverId>/<int:userId>/delete", methods=["DELETE"])
 def delete_server(serverId, userId):
-    # userId is the id of the user submitting this request
-    print(
-        "----%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-inside---------%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%------"
-    )
 
     server = Server.query.get(serverId)
     # Check that the user submitting request is the master admin
@@ -194,22 +157,6 @@ def delete_channel(serverId, channelId):
     return jsonify(channelId)
 
 
-# ------------------------- Routes for messages -------------------------------------
-
-# read all messages of a single channel
-# @server_routes.route("/<int:serverId>/<int:channelId>")
-# @login_required
-# def get_channel_messages(serverId, channelId):
-#     channel = Channel.query.get(channelId)
-#     target_channel = channel.to_dict()
-#     print("backend target channel:")
-#     print(target_channel["messages"])
-#     return {target_channel["messages"]}
-
-
-# read all messages of a single channel
-# each message looks like:
-#  {'id': 2, 'userId': 1, 'channelId': 1, 'message': 'Who loves javascript'}
 @server_routes.route("/channels/<int:id>")
 @login_required
 def get_channel_messages(id):

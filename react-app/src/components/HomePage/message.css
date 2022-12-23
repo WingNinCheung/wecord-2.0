@@ -1,25 +1,28 @@
 .messagesContainer {
   color: white;
   width: 100%;
-  height: 85vh;
-  /* 88 */
+  height: 90vh;
   display: flex;
   flex-direction: column;
-  /* align-items: center; */
   background-color: #3a3c42;
   display: inline-grid;
   overflow-x: hidden;
   overflow-y: scroll;
+}
+.messagesContainer::-webkit-scrollbar {
+  display: none;
+}
+
+.innerMsg {
+  margin-bottom: 46px;
 }
 
 .messagesDisplay {
   list-style-type: none;
   width: 250px;
   height: 100%;
-  /* display: flex; */
   flex-direction: column;
   align-items: center;
-  /* background-color: #2f3136; */
 }
 
 .singleMessageDisplay {
@@ -89,10 +92,8 @@
 .create-message {
   width: 68.8vw;
   height: 5vh;
-  /* overflow-y: scroll; */
   background-color: #393a3e;
   color: white;
-  /* position: sticky; */
   z-index: 1;
   display: inline-grid;
   grid-template-columns: 1fr 1fr;
@@ -101,11 +102,9 @@
 .edit-form {
   width: 100px;
   height: 100px;
-  /* position: fixed; */
 }
 
 .send-button {
-  /* color: aqua; */
   background-color: red;
   height: 30px;
   position: fixed;

@@ -311,19 +311,6 @@ function HomePage() {
     await dispatch(getAllServers(loggedInUserId));
   };
 
-  // -----------------------------------------------
-
-  // get server title for channel
-  const getServerTitle = (chanlId) => {
-    for (let server in allServers) {
-      if (server.id === chanlId) {
-        return server.name;
-      }
-    }
-  };
-
-  // create a channel
-
   return (
     <div>
       <div className="updateServerForm">

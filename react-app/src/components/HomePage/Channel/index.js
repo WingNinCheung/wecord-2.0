@@ -1,6 +1,5 @@
 import CreateChannel from "./createChannel";
 import EditChannel from "./editChannel";
-import HomePage from "../index";
 import { useDispatch, useSelector } from "react-redux";
 import { getServerChannelsThunk } from "../../../store/channel";
 import { useEffect, useState } from "react";
