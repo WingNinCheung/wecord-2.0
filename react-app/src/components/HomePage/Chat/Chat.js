@@ -18,11 +18,10 @@ export default function Chat({
   const dispatch = useDispatch();
   const user = useSelector((state) => state.session.user);
   let oldMessages = useSelector((state) => state.messages);
+
   const messageEl = useRef(null);
 
-  // user messages
   const [messages, setMessages] = useState([]);
-  // controlled form input
   const [chatInput, setChatInput] = useState("");
   const [validationErrors, setValidationErrors] = useState([]);
   const [openEditForm, setOpenEditForm] = useState(false);
@@ -62,13 +61,12 @@ export default function Chat({
       }
     };
     document.addEventListener("keydown", keyHandler);
-
     return () => {
       document.removeEventListener("keydown", keyHandler);
     };
   });
 
-  // Run socket stuff (so connect/disconnect ) whenever channelId changes
+  // Live Chat
   useEffect(() => {
     // create websocket/connect
     socket = io();
@@ -79,8 +77,6 @@ export default function Chat({
 
     // listen for chat events
     socket.on("chat", async (chat) => {
-      // when we receive a chat, add to our messages array in state
-      console.log("fuck", chat);
       setMessages((messages) => [...messages, chat]);
       await dispatch(getChannelMessagesThunk(channelId));
     });
@@ -88,8 +84,6 @@ export default function Chat({
     // listen for edited messages
     socket.on("edit", async (updatedMessages) => {
       setOpenEditForm(false);
-      console.log("the origin msg", messages);
-      console.log("what I have", updatedMessages);
       const updatedID = updatedMessages.messageId;
       setMessages((messages) => [
         ...messages,
@@ -112,11 +106,10 @@ export default function Chat({
   const sendChat = async (e) => {
     e.preventDefault();
 
-    // last object value tells database to edit message or not
+    // Check if the input contains spaces or is empty
     if (chatInput.trim() !== "") {
       if (openEditForm) {
         if (messageId) {
-          //need messageId or edit gets messed up
           socket.emit("edit", {
             user: user.username,
             message: chatInput,

@@ -19,10 +19,6 @@ else:
 
 
 # create your SocketIO instance
-# socketio = SocketIO(cors_allowed_origins=origins)
-# create SocketIO instance
-# The logger argument controls logging related to the Socket.IO protocol
-# engineio_logger controls logs that originate in the low-level Engine.IO transport
 socketio = SocketIO(cors_allowed_origins="*", logger=True, engineio_logger=True)
 
 # do stuff on connect - I wanna load our messages
@@ -54,8 +50,6 @@ def handle_chat(data):
     data["id"] = new_MessageId.id
     socketio.emit("chat", data, broadcast=True)
 
-    print("*" * 30, data)
-
 
 @socketio.on("edit")
 def handle_edit(data):
@@ -68,12 +62,7 @@ def handle_edit(data):
 
         message.message = data["message"]
         db.session.commit()
-
-        newMessages = get_channel_messages(data["channelId"])
-
         socketio.emit("edit", data, broadcast=True)
-        print("*" * 30, data)
-
     else:
         socketio.send({"Only the message author may edit this message"})
 
@@ -92,11 +81,6 @@ def on_join(data):
     socketio.send(username + " has entered the room", to=room)
 
 
-# test to see if we can have a connection event
-# @socketio.on('connect')
-# def test_connect(auth):
-#     socketio.emit('my response', {'data': 'Connected'})
-
 # leave a chatroom
 @socketio.on("leave")
 def on_leave(data):
@@ -106,18 +90,3 @@ def on_leave(data):
     room = channel.title
     leave_room(room)
     socketio.send(username + " has left the channel.", to=room)
-
-
-#         // test emitting to that test room when chatting
-#         // io.to() <- add a room to an array, io._rooms
-#         socketio.to(channelName).emit("chat");
-
-# All clients are assigned a room when they connect, named with the session ID of the connection,
-# which can be obtained from request.sid.
-
-# Unlike with a Flask route handler, we will not need to have an actual return statement-
-# we send messages explicitly using emit or send functions.
-
-# https://flask-socketio.readthedocs.io/en/latest/getting_started.html#connection-events
-# check here if we need to work with authentication for messages (this is a way to provide
-# auth tokens with the messages)

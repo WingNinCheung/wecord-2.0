@@ -7,13 +7,8 @@ import {
   getServerChannelsThunk,
   deleteChannelThunk,
 } from "../../store/channel";
-import {
-  getChannelMessagesThunk,
-  deleteMessageThunk,
-} from "../../store/messages";
+import { getChannelMessagesThunk } from "../../store/messages";
 
-import CreateChannel from "./Channel/createChannel";
-import EditChannel from "./Channel/editChannel";
 import Channel from "./Channel/index";
 
 import {
@@ -72,7 +67,6 @@ function HomePage() {
   const [selectedServerId, setSelectedServerId] = useState(
     defaultSelectedServerId
   );
-  console.log("server id:,", selectedServerId);
   const [adminId, setAdminId] = useState();
   const [goToChannel, setGoToChannels] = useState(false);
   const [openChannels, setOpenChannels] = useState(true);
@@ -81,6 +75,7 @@ function HomePage() {
   const [goToChannelMessages, setGoToChannelsMessages] = useState(false);
   const [channelName, setChannelName] = useState("");
   const [userIsInServer, setUserIsInServer] = useState(false);
+
   // true if we are in public view. false if we are looking @ private servers
   const [isPublic, setIsPublic] = useState(true);
   const history = useHistory();
@@ -99,11 +94,11 @@ function HomePage() {
     await dispatch(deleteChannelThunk(selectedServerId, selectedChannelId));
     setShowChannelMessages(false);
   };
+
   const handleDeleteServer = async (e) => {
     e.preventDefault();
     await dispatch(deleteServer(selectedServerId, loggedInUserId));
     await dispatch(getAllServers(loggedInUserId));
-
     setGoToChannels(false);
     setGoToChannelsMessages(false);
     setShowChannelMessages(false);
@@ -237,7 +232,6 @@ function HomePage() {
   const handleCancel = (e) => {
     e.preventDefault();
     setEdit(false);
-    history.push("/home");
   };
 
   // Right-click menu for server
@@ -262,28 +256,6 @@ function HomePage() {
     window.addEventListener("click", handleClick);
     return () => window.removeEventListener("click", handleClick);
   }, []);
-
-  // Error handler for empty server name when creating new servers
-  useEffect(() => {
-    const errors = [];
-    if (!name.length) {
-      errors.push("Server name cannot be empty!");
-    }
-    setValidationErrors(errors);
-  }, [name]);
-
-  // Read all channels of a server
-  // const loadChannel = async () => {
-  //   await dispatch(getServerChannelsThunk(selectedServerId));
-  //   setGoToChannels(false);
-  // };
-
-  // useEffect(() => {
-  //   if (defaultSelectedServerId) loadChannel();
-  // }, [dispatch, goToChannel]);
-
-  const allChannels = useSelector((state) => state.channel);
-  const serverChannels = Object.values(allChannels);
 
   //----------------------------------------------------
 
