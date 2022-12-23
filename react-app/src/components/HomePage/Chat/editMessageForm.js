@@ -1,7 +1,4 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { editMessageThunk } from "../../../store/messages";
-import { useHistory } from "react-router-dom";
 
 export default function EditMessageForm({
   messageId,
@@ -15,14 +12,10 @@ export default function EditMessageForm({
 }) {
   const [validationErrors, setValidationErrors] = useState([]);
 
-  const dispatch = useDispatch();
-  const history = useHistory();
-
   const handleCancel = (e) => {
     e.preventDefault();
     setShow(false);
     setShowModal(true);
-    history.push("/home");
   };
 
   useEffect(() => {
@@ -32,13 +25,14 @@ export default function EditMessageForm({
       errors.push("only people who created it can delete message");
     }
 
-    if (!chatInput.length) {
+    if (!chatInput.trim().length) {
       errors.push("Message cannot be empty!");
+    }
+    if (chatInput.length >= 100) {
+      errors.push("Message must be less than 100 characters");
     }
     setValidationErrors(errors);
   }, [chatInput]);
-
-  // if (!userId) return <p className="loading">"Loading..."</p>
 
   return (
     <div className="">
@@ -47,7 +41,9 @@ export default function EditMessageForm({
         <form className="form-body" onSubmit={sendChat}>
           <ul className="Err">
             {validationErrors.map((error) => (
-              <li key={error} className="error">{error}</li>
+              <li key={error} className="error">
+                {error}
+              </li>
             ))}
           </ul>
           <textarea
@@ -69,9 +65,3 @@ export default function EditMessageForm({
     </div>
   );
 }
-
-//TODO:
-// Edit message box must preload the edited message
-
-//I am calling both a socket instance AND my thunk to a route when updating the shit. need to just call
-// socket.

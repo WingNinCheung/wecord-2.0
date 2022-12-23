@@ -67,7 +67,7 @@ export default function Splash() {
           <section className="dev-info">
             <img
               className="profile-pic"
-              src="https://media-exp1.licdn.com/dms/image/C5603AQGWk2Gqsts5JA/profile-displayphoto-shrink_800_800/0/1563818007698?e=1664409600&v=beta&t=vVd1pvvenK9aSpDCYrZI9CSI6NZHXnAa4b6rjRPlnUk"
+              src="https://avatars.githubusercontent.com/u/96600317?v=4"
               alt="Ricky"
             ></img>
             <div className="profile-section">
@@ -83,7 +83,7 @@ export default function Splash() {
                 >
                   <i className="fa-brands fa-linkedin-in"></i>
                 </a>
-                <a href="mailto:wingnin.cheung415@gmail.com">
+                <a href="mailto:rickycheung.dev@gmail.com">
                   <i className="fa-solid fa-envelope"></i>
                 </a>
               </div>
@@ -92,7 +92,7 @@ export default function Splash() {
           <section className="dev-info">
             <img
               className="profile-pic"
-              src="https://media-exp1.licdn.com/dms/image/C5603AQGU_VDz-D81wg/profile-displayphoto-shrink_800_800/0/1622773943069?e=1664409600&v=beta&t=ksJ3ORRhPKG4qYtf8FdY6p9uhuRYOplJdrDSFfFEv_A"
+              src="https://avatars.githubusercontent.com/u/8907997?v=4"
               alt="Krista"
             ></img>
             <div className="profile-section">
@@ -117,7 +117,7 @@ export default function Splash() {
           <section className="dev-info">
             <img
               className="profile-pic"
-              src="https://media-exp1.licdn.com/dms/image/C4E03AQF0fmknzYk1rA/profile-displayphoto-shrink_200_200/0/1580893094660?e=1664409600&v=beta&t=7f9AE6QP-kp8pWoW34enfUdyeN6AGSNwOTZtc-khsUc"
+              src="https://avatars.githubusercontent.com/u/101230473?v=4"
               alt="Brendan"
             ></img>
             <div className="profile-section">
@@ -142,7 +142,7 @@ export default function Splash() {
           <section className="dev-info">
             <img
               className="profile-pic"
-              src="https://media-exp1.licdn.com/dms/image/C4D03AQGk5rQvlCZ_yA/profile-displayphoto-shrink_400_400/0/1654710587613?e=1664409600&v=beta&t=ZDV4dpaekhMtnq8dTWBKs02sAcnUTE_frRgSbE8OI7o"
+              src="https://avatars.githubusercontent.com/u/92266749?v=4"
               alt="Joyce"
             ></img>
             <div className="profile-section">

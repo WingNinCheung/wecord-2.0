@@ -4,34 +4,27 @@ const GET_ALL_SERVERUSERS = "serverusers/GET_ALL_SERVERUSERS";
 const LEAVE_SERVER = "serverusers/LEAVE_SERVER";
 
 const getServerUsers = (serverUsers) => {
-
   return {
     type: GET_ALL_SERVERUSERS,
     serverUsers,
   };
-  
 };
 
 const addUserToServer = (serverUser) => {
-
   return {
     type: ADD_SERVERUSER,
     serverUser,
   };
-
 };
 
 const deleteUserInServer = (serverUser) => {
-
   return {
     type: LEAVE_SERVER,
     serverUser,
   };
-
 };
 
 export const getAllServerUsers = (serverId) => async (dispatch) => {
-
   const res = await fetch(`/api/server_users/${serverId}`);
 
   if (res.ok) {
@@ -41,7 +34,6 @@ export const getAllServerUsers = (serverId) => async (dispatch) => {
   }
 };
 export const addServerUser = (userId, serverId) => async (dispatch) => {
-  // /api/server_users
   const res = await fetch("/api/server_users/post", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -54,7 +46,6 @@ export const addServerUser = (userId, serverId) => async (dispatch) => {
   }
 };
 export const leaveServer = (userId, serverId) => async (dispatch) => {
-  // /api/server_users/:serverId
   const res = await fetch(`api/server_users/${serverId}/${userId}`, {
     method: "DELETE",
   });

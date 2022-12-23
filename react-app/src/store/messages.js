@@ -19,14 +19,6 @@ const createChannelMessage = (message) => {
   };
 };
 
-// update
-// const editChannelMessage = (message) => {
-//     return {
-//         type: EDIT_MESSAGE,
-//         message
-//     }
-// }
-
 // delete
 const deleteChannelMessage = (message) => {
   return {

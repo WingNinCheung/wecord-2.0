@@ -1,6 +1,4 @@
-// GET ALL PUBLIC SERVERS
 const GET_ALL_SERVERS = "servers/GET_PUBLIC_SERVERS";
-// const GET_ONE_SERVER = 'servers/GET_ONE'
 const CREATE_SERVER = "servers/CREATE_SERVER";
 const UPDATE_SERVER = "servers/UPDATE_SERVER";
 const DELETE_SERVER = "servers/DELETE_SERVER";

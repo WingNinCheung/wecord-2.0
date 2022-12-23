@@ -32,12 +32,14 @@ export default function CreateForm() {
     e.preventDefault();
     history.push("/home");
   };
+
   useEffect(() => {
     const errors = [];
 
-    if (!name.length) {
+    if (!name.trim().length) {
       errors.push("Server name cannot be empty!");
     }
+
     setValidationErrors(errors);
   }, [name]);
 
@@ -48,7 +50,9 @@ export default function CreateForm() {
         <form onSubmit={handleSubmit} className="create-form">
           <ul className="Err">
             {validationErrors.map((error) => (
-              <li key={error} className="error">{error}</li>
+              <li key={error} className="error">
+                {error}
+              </li>
             ))}
           </ul>
           <input
@@ -56,7 +60,9 @@ export default function CreateForm() {
             onChange={(e) => setName(e.target.value)}
             className="inputarea"
           ></input>
-          <button className="createButton">Create</button>
+          <button className="createButton" disabled={validationErrors.length}>
+            Create
+          </button>
           <button className="createButton" onClick={handleCancel}>
             Cancel
           </button>

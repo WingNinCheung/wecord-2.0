@@ -1,24 +1,28 @@
 .messagesContainer {
   color: white;
   width: 100%;
-  height: 85vh;
-  /* 88 */
+  height: 90vh;
   display: flex;
   flex-direction: column;
-  /* align-items: center; */
   background-color: #3a3c42;
   display: inline-grid;
-  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+.messagesContainer::-webkit-scrollbar {
+  display: none;
+}
+
+.innerMsg {
+  margin-bottom: 46px;
 }
 
 .messagesDisplay {
   list-style-type: none;
   width: 250px;
   height: 100%;
-  /* display: flex; */
   flex-direction: column;
   align-items: center;
-  /* background-color: #2f3136; */
 }
 
 .singleMessageDisplay {
@@ -26,13 +30,10 @@
   display: flex;
   flex-direction: column;
   height: auto;
-  /* width: 80rem; */
   width: 82rem;
   margin: 1rem;
   border: solid transparent 1px;
-  /* box-shadow: rgba(0, 0, 0, 0.3) 0px 3px 8px; */
   overflow: hidden;
-  cursor: pointer;
 }
 
 .singleMessageDisplay:hover {
@@ -57,14 +58,13 @@
 }
 
 .fa-pen-to-square {
-  /* position: absolute; */
   right: 12%;
   margin-right: 20px;
-  /* z-index: 0; */
+  cursor: pointer;
 }
 
 .fa-trash-can {
-  /* position: absolute; */
+  cursor: pointer;
   right: 10%;
   z-index: 0;
 }
@@ -86,28 +86,25 @@
   color: red;
   position: fixed;
   bottom: 0;
-}
-
-.edit-form {
-  width: 100px;
-  height: 100px;
-  /* position: fixed; */
+  width: 200px;
 }
 
 .create-message {
-  width: 68vw;
+  width: 68.8vw;
   height: 5vh;
-  /* overflow-y: scroll; */
   background-color: #393a3e;
   color: white;
-  /* position: sticky; */
   z-index: 1;
   display: inline-grid;
   grid-template-columns: 1fr 1fr;
 }
 
+.edit-form {
+  width: 100px;
+  height: 100px;
+}
+
 .send-button {
-  /* color: aqua; */
   background-color: red;
   height: 30px;
   position: fixed;
