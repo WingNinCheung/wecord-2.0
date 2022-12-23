@@ -2,20 +2,37 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.schema import Column, ForeignKey, Table
 from sqlalchemy.types import Integer, String, Boolean
 from sqlalchemy.orm import relationship
+import os
+
+environment = os.getenv("FLASK_ENV")
+SCHEMA = os.environ.get("SCHEMA")
+
 
 db = SQLAlchemy()
 
+
+def add_prefix_for_prod(attr):
+    if environment == "production":
+        return f"{SCHEMA}.{attr}"
+    else:
+        return attr
+
+
 class Friend(db.Model):
     __tablename__ = "friends"
+    if environment == "production":
+        __table_args__ = {"schema": SCHEMA}
     id = db.Column(db.Integer, primary_key=True)
     userId = Column(Integer, nullable=False)
-    friendId = Column(Integer, db.ForeignKey("users.id"), nullable=False)
+    friendId = Column(
+        Integer, db.ForeignKey(add_prefix_for_prod("users.id"), nullable=False)
+    )
     accepted = Column(Boolean, default=False)
 
     user = relationship("User", back_populates="friends")
 
     def to_dict(self):
-        return{
+        return {
             "id": self.id,
             "userId": self.userId,
             "friendId": self.friendId,
@@ -25,9 +42,15 @@ class Friend(db.Model):
 
 class Server_User(db.Model):
     __tablename__ = "serverusers"
+    if environment == "production":
+        __table_args__ = {"schema": SCHEMA}
     id = db.Column(db.Integer, primary_key=True)
-    serverId = Column(Integer, db.ForeignKey("servers.id"), nullable=False)
-    userId = Column(Integer, db.ForeignKey("users.id"), nullable=False)
+    serverId = Column(
+        Integer, db.ForeignKey(add_prefix_for_prod("servers.id"), nullable=False)
+    )
+    userId = Column(
+        Integer, db.ForeignKey(add_prefix_for_prod("users.id"), nullable=False)
+    )
     adminStatus = Column(Boolean, default=False)
     muted = Column(Boolean, default=False)
 
@@ -46,9 +69,13 @@ class Server_User(db.Model):
 
 class Server(db.Model):
     __tablename__ = "servers"
+    if environment == "production":
+        __table_args__ = {"schema": SCHEMA}
 
     id = db.Column(db.Integer, primary_key=True)
-    master_admin = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    master_admin = db.Column(
+        db.Integer, db.ForeignKey(add_prefix_for_prod("users.id"), nullable=False)
+    )
     name = db.Column(db.String(50), nullable=False)
     private = db.Column(db.Boolean, nullable=False)
     picture = db.Column(db.Text)
@@ -70,15 +97,19 @@ class Server(db.Model):
             "name": self.name,
             "private": self.private,
             "picture": self.picture,
-            "channels": [channel.to_dict() for channel in self.channels]
+            "channels": [channel.to_dict() for channel in self.channels],
         }
 
 
 class Channel(db.Model):
     __tablename__ = "channels"
+    if environment == "production":
+        __table_args__ = {"schema": SCHEMA}
 
     id = Column(Integer, primary_key=True)
-    serverId = Column(Integer, ForeignKey("servers.id"), nullable=False)
+    serverId = Column(
+        Integer, ForeignKey(add_prefix_for_prod("servers.id"), nullable=False)
+    )
     title = Column(String(30), nullable=False)
 
     # relationships
@@ -96,10 +127,16 @@ class Channel(db.Model):
 
 class Message(db.Model):
     __tablename__ = "messages"
+    if environment == "production":
+        __table_args__ = {"schema": SCHEMA}
 
     id = Column(Integer, primary_key=True)
-    userId = Column(Integer, ForeignKey("users.id"), nullable=False)
-    channelId = Column(Integer, ForeignKey("channels.id"), nullable=False)
+    userId = Column(
+        Integer, ForeignKey(add_prefix_for_prod("users.id"), nullable=False)
+    )
+    channelId = Column(
+        Integer, ForeignKey(add_prefix_for_prod("channels.id"), nullable=False)
+    )
     message = Column(String(1500), nullable=False)
 
     # relationships

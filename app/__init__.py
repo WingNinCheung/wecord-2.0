@@ -20,7 +20,7 @@ from .seeds import seed_commands
 
 from .config import Config
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="../react-app/build", static_url_path="/")
 
 # Setup login manager
 login = LoginManager(app)
@@ -37,12 +37,12 @@ app.cli.add_command(seed_commands)
 
 app.config.from_object(Config)
 
-app.register_blueprint(user_routes, url_prefix='/api/users')
-app.register_blueprint(auth_routes, url_prefix='/api/auth')
-app.register_blueprint(server_routes, url_prefix='/api/servers')
-app.register_blueprint(message_routes, url_prefix='/api/messages')
+app.register_blueprint(user_routes, url_prefix="/api/users")
+app.register_blueprint(auth_routes, url_prefix="/api/auth")
+app.register_blueprint(server_routes, url_prefix="/api/servers")
+app.register_blueprint(message_routes, url_prefix="/api/messages")
 app.register_blueprint(server_user_routes, url_prefix="/api/server_users")
-app.register_blueprint(friend_routes, url_prefix='/api/friends')
+app.register_blueprint(friend_routes, url_prefix="/api/friends")
 
 db.init_app(app)
 Migrate(app, db)
@@ -84,10 +84,16 @@ def inject_csrf_token(response):
 @app.route("/<path:path>")
 def react_root(path):
     if path == "favicon.ico":
-        return app.send_static_file("favicon.ico")
+        # return app.send_static_file("favicon.ico")
+        return app.send_from_directory("public", "favicon.ico")
     return app.send_static_file("index.html")
 
 
 # run our chat app
-if __name__ == '__main__':
+if __name__ == "__main__":
     socketio.run(app)
+
+
+@app.errorhandler(404)
+def not_found(e):
+    return app.send_static_file("index.html")

@@ -39,14 +39,11 @@ def addAFriend():
 @friend_routes.route("yourfriends/<int:id>")
 def getFriend(id):
     friendsList = Friend.query.filter(Friend.userId == id).all()
-    # print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@',friendsList[0].user)
+
     return {
         "friends": [friend.to_dict() for friend in friendsList],
         "eachFriend": [friend.user.to_dict() for friend in friendsList],
     }
-
-
-# ---------------------------------------------------------------
 
 
 @friend_routes.route("/<int:userId>/<int:friendId>", methods=["DELETE"])
@@ -58,10 +55,8 @@ def unfriend(userId, friendId):
         Friend.friendId == friendId, Friend.userId == userId
     ).all()
     for friend in person:
-        print(friend)
         db.session.delete(friend)
     for friend in person2:
-        print(friend)
         db.session.delete(friend)
     db.session.commit()
     servers = Server.query.filter(Server.private == True).all()

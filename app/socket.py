@@ -13,7 +13,7 @@ from .api.server_routes import get_channel_messages
 #     origins="*"
 
 if os.environ.get("FLASK_ENV") == "production":
-    origins = ["http://wecord.herokuapp.com", "https://wecord.herokuapp.com"]
+    origins = ["https://wecord-2.onrender.com", "http://wecord-2.onrender.com"]
 else:
     origins = "*"
 

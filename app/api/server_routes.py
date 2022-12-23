@@ -68,11 +68,7 @@ def new_server():
 def edit_server(id):
     server = Server.query.get(id)
     data = request.json
-    print("data")
-    # server.master_admin = current_user.id
     server.name = data["name"]
-    # server.private skip for now
-    # server.picture = data['picture']
     db.session.commit()
     return server.to_dict()
 
@@ -94,12 +90,6 @@ def delete_server(serverId, userId):
 @server_routes.route("/private/<int:userId>")
 def checkUserInServer(userId):
     serverUsers = Server_User.query.filter(Server_User.userId == userId).all()
-    print("$$$$$$$$$$$$$$$$$$$############", serverUsers)
-    print(
-        "$$$$$$$$$$$$$$$$$$$############",
-        {"server": [server.server.to_dict() for server in serverUsers]},
-    )
-
     return {"yourservers": [server.server.to_dict() for server in serverUsers]}
 
 
@@ -134,7 +124,6 @@ def channels_edit(id, channelId):
     # channel = Channel.query.filter(Channel.id == channelId).all()
     channel = Channel.query.get(channelId)
     title = request.json["title"]
-    print((channel))
     channel.title = title
     db.session.add(channel)
     db.session.commit()
@@ -149,7 +138,6 @@ def channels_edit(id, channelId):
 def delete_channel(serverId, channelId):
 
     channel = Channel.query.filter(Channel.id == channelId).all()
-    print("******", channel[0])
     db.session.delete(channel[0])
     # target_channel.delete()
     db.session.commit()

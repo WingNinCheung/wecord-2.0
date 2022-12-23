@@ -40,9 +40,6 @@ def channels_edit(userId, messageId):
 def delete_server(userId, messageId):
 
     message = Message.query.get(messageId)
-    print("backend delete testing:__________________")
-    print(message)
-    print(messageId)
     # check if the user submitting this request is the message author
     if userId == message.userId:
         db.session.delete(message)

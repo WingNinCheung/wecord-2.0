@@ -10,7 +10,6 @@ function Channel(props) {
     await dispatch(getServerChannelsThunk(props.selectedServerId));
     props.setGoToChannels(false);
   };
-  console.log("in channel", props.editChannel);
 
   useEffect(() => {
     if (props.defaultSelectedServerId) loadChannel();

@@ -18,8 +18,6 @@ def all_server_users(serverId):
     return {"serverUser": server_users}
 
 
-
-
 # CREATE /api/server_users
 @server_user_routes.route("/post", methods=["POST"])
 @login_required
@@ -40,7 +38,6 @@ def leave_server(serverId, userId):
     ).all()
     # su is session user btw
     su = serverUser[0]
-    print(su)
     db.session.delete(su)
     db.session.commit()
     return {"server": su.to_dict(), "user": su.user.to_dict()}
