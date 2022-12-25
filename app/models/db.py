@@ -25,7 +25,7 @@ class Friend(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     userId = Column(Integer, nullable=False)
     friendId = Column(
-        Integer, db.ForeignKey(add_prefix_for_prod("users.id"), nullable=False)
+        Integer, db.ForeignKey(add_prefix_for_prod("users.id")), nullable=False
     )
     accepted = Column(Boolean, default=False)
 
@@ -46,10 +46,10 @@ class Server_User(db.Model):
         __table_args__ = {"schema": SCHEMA}
     id = db.Column(db.Integer, primary_key=True)
     serverId = Column(
-        Integer, db.ForeignKey(add_prefix_for_prod("servers.id"), nullable=False)
+        Integer, db.ForeignKey(add_prefix_for_prod("servers.id")), nullable=False
     )
     userId = Column(
-        Integer, db.ForeignKey(add_prefix_for_prod("users.id"), nullable=False)
+        Integer, db.ForeignKey(add_prefix_for_prod("users.id")), nullable=False
     )
     adminStatus = Column(Boolean, default=False)
     muted = Column(Boolean, default=False)
@@ -74,7 +74,7 @@ class Server(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     master_admin = db.Column(
-        db.Integer, db.ForeignKey(add_prefix_for_prod("users.id"), nullable=False)
+        db.Integer, db.ForeignKey(add_prefix_for_prod("users.id")), nullable=False
     )
     name = db.Column(db.String(50), nullable=False)
     private = db.Column(db.Boolean, nullable=False)
@@ -108,7 +108,7 @@ class Channel(db.Model):
 
     id = Column(Integer, primary_key=True)
     serverId = Column(
-        Integer, ForeignKey(add_prefix_for_prod("servers.id"), nullable=False)
+        Integer, ForeignKey(add_prefix_for_prod("servers.id")), nullable=False
     )
     title = Column(String(30), nullable=False)
 
@@ -132,10 +132,10 @@ class Message(db.Model):
 
     id = Column(Integer, primary_key=True)
     userId = Column(
-        Integer, ForeignKey(add_prefix_for_prod("users.id"), nullable=False)
+        Integer, ForeignKey(add_prefix_for_prod("users.id")), nullable=False
     )
     channelId = Column(
-        Integer, ForeignKey(add_prefix_for_prod("channels.id"), nullable=False)
+        Integer, ForeignKey(add_prefix_for_prod("channels.id")), nullable=False
     )
     message = Column(String(1500), nullable=False)
 
