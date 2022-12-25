@@ -48,7 +48,7 @@ def upgrade():
         op.execute(f"ALTER TABLE channels SET SCHEMA {SCHEMA};")
 
     op.create_table(
-        "server_users",
+        "serverusers",
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column("userId", sa.Integer(), nullable=False),
         sa.Column("serverId", sa.Integer(), nullable=False),
