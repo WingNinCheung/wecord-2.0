@@ -146,29 +146,33 @@ export default function Chat({
                 <div className="msg-body">
                   <span className="message">{message.message}</span>
                 </div>
-                <div className="edit-del">
-                  <span
-                    onClick={() => {
-                      setMessageId(message.id);
-                      setOpenEditForm(true);
-                      setMessageUserId(message.userId);
-                      setChatInput(message.message);
-                    }}
-                  >
-                    <i className="fa-solid fa-pen-to-square"></i>
-                  </span>
-                  <span>
+                {message.userId === user.id ? (
+                  <div className="edit-del">
                     <span
                       onClick={() => {
                         setMessageId(message.id);
-                        setDeleteStatus(true);
+                        setOpenEditForm(true);
                         setMessageUserId(message.userId);
+                        setChatInput(message.message);
                       }}
                     >
-                      <i className="fa-solid fa-trash-can"></i>
+                      <i className="fa-solid fa-pen-to-square"></i>
                     </span>
-                  </span>
-                </div>
+                    <span>
+                      <span
+                        onClick={() => {
+                          setMessageId(message.id);
+                          setDeleteStatus(true);
+                          setMessageUserId(message.userId);
+                        }}
+                      >
+                        <i className="fa-solid fa-trash-can"></i>
+                      </span>
+                    </span>
+                  </div>
+                ) : (
+                  <div></div>
+                )}
                 <div ref={messageEl}></div>
               </div>
             ) : (
