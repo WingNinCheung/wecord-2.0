@@ -80,6 +80,11 @@ def inject_csrf_token(response):
     return response
 
 
+# run our chat app
+if __name__ == "__main__":
+    socketio.run(app)
+
+
 @app.route("/", defaults={"path": ""})
 @app.route("/<path:path>")
 def react_root(path):
@@ -87,11 +92,6 @@ def react_root(path):
         # return app.send_static_file("favicon.ico")
         return app.send_from_directory("public", "favicon.ico")
     return app.send_static_file("index.html")
-
-
-# run our chat app
-if __name__ == "__main__":
-    socketio.run(app)
 
 
 @app.errorhandler(404)

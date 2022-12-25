@@ -39,6 +39,8 @@ def upgrade():
         ),
         sa.PrimaryKeyConstraint("id"),
     )
+    if environment == "production":
+        op.execute(f"ALTER TABLE serverusers SET SCHEMA {SCHEMA};")
     op.drop_table("server_users")
     # ### end Alembic commands ###
 
