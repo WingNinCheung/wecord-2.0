@@ -57,23 +57,22 @@ function User() {
         <div className="profileDiv">
           <h3 className="proTitle">User Profile</h3>
 
-            {friendsState[yourId] == undefined &&
-            yourId !== parseInt(userId) ? (
-              <button onClick={addFriendButton} className="friendBtn">
-                Add Friend
+          {friendsState[yourId] == undefined && yourId !== parseInt(userId) ? (
+            <button onClick={addFriendButton} className="friendBtn">
+              Add Friend
+            </button>
+          ) : (
+            yourId !== parseInt(userId) && (
+              <button onClick={removeFriendButton} className="friendBtn">
+                Unfriend
               </button>
-            ) : (
-              yourId !== parseInt(userId) && (
-                <button onClick={removeFriendButton} className="friendBtn">
-                  Unfriend
-                </button>
-              )
-            )}
+            )
+          )}
 
           <ul className="userProfile1">
-            <li className="useLi1">
+            {/* <li className="useLi1">
               <strong>User Id:</strong> {userId}
-            </li>
+            </li> */}
             <br></br>
             <li className="useLi1">
               <strong>Username:</strong> {user.username}
@@ -83,7 +82,12 @@ function User() {
               <strong>Email:</strong> {user.email}
             </li>
           </ul>
-            <button className= "friendBtn goBackBtn" onClick={(e) => history.goBack()}>Go Back</button>
+          <button
+            className="friendBtn goBackBtn"
+            onClick={(e) => history.goBack()}
+          >
+            Go Back
+          </button>
         </div>
       </div>
     );

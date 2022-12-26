@@ -15,4 +15,5 @@
 
 .logoutBtn:hover {
   border: var(--light-white) 1px solid;
+  cursor: pointer;
 }

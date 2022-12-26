@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Redirect, useHistory } from "react-router-dom";
 import { signUp } from "../../store/session";
@@ -9,13 +9,17 @@ const SignUpForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+
   const user = useSelector((state) => state.session.user);
   const dispatch = useDispatch();
   const history = useHistory();
 
   const onSignUp = async (e) => {
     e.preventDefault();
-    if (password === repeatPassword) {
+    setHasSubmitted(true);
+    validator();
+    if (password === repeatPassword && !errors.length) {
       const data = await dispatch(signUp(username, email, password));
       if (data) {
         setErrors(data);
@@ -23,9 +27,26 @@ const SignUpForm = () => {
         history.push("/home");
       }
     }
-    return setErrors([
-      "Confirm Password field must be the same as the Password field",
-    ]);
+  };
+
+  const validator = () => {
+    let errors = [];
+
+    if (username.trim() === "") {
+      errors.push("User name cannot be empty");
+    }
+    if (email.trim() === "") {
+      errors.push("Email cannot be empty");
+    }
+
+    if (!/[a-zA-Z0-9]+@[a-zA-Z]+\.[a-zA-Z]{2,3}/.test(email)) {
+      errors.push("Invalid email address (e.g abc@gmail.com)");
+    }
+
+    if (password !== repeatPassword) {
+      errors.push("Password and repear password do not match");
+    }
+    setErrors(errors);
   };
 
   const updateUsername = (e) => {
@@ -51,11 +72,12 @@ const SignUpForm = () => {
   return (
     <form className="login-container" onSubmit={onSignUp}>
       <div>
-        {errors.map((error, ind) => (
-          <div key={ind} className="error">
-            {error}
-          </div>
-        ))}
+        {hasSubmitted &&
+          errors.map((error, ind) => (
+            <div key={ind} className="error">
+              {error}
+            </div>
+          ))}
       </div>
       <h2 className="login-title">Create an account</h2>
       <div className="field">
