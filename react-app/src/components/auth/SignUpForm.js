@@ -18,8 +18,8 @@ const SignUpForm = () => {
   const onSignUp = async (e) => {
     e.preventDefault();
     setHasSubmitted(true);
-    validator();
-    if (password === repeatPassword && !errors.length) {
+    if (validator()) {
+      setErrors([]);
       const data = await dispatch(signUp(username, email, password));
       if (data) {
         setErrors(data);
@@ -46,7 +46,12 @@ const SignUpForm = () => {
     if (password !== repeatPassword) {
       errors.push("Password and repear password do not match");
     }
-    setErrors(errors);
+    if (errors.length) {
+      setErrors(errors);
+      return false;
+    } else {
+      return true;
+    }
   };
 
   const updateUsername = (e) => {
@@ -72,14 +77,14 @@ const SignUpForm = () => {
   return (
     <form className="login-container" onSubmit={onSignUp}>
       <div>
-        {hasSubmitted &&
-          errors.map((error, ind) => (
-            <div key={ind} className="error">
-              {error}
-            </div>
-          ))}
+        {/* {hasSubmitted && */}
+        {errors.map((error, ind) => (
+          <div key={ind} className="error">
+            {error}
+          </div>
+        ))}
       </div>
-      <h2 className="login-title">Create an account</h2>
+      <h2 className="login-title">Create an Account</h2>
       <div className="field">
         <div>
           <div>
