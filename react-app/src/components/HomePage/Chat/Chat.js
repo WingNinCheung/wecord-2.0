@@ -28,6 +28,7 @@ export default function Chat({
   const [messageId, setMessageId] = useState("");
   const [messageUserId, setMessageUserId] = useState("");
   const [deleteStatus, setDeleteStatus] = useState(false);
+  const [chatRoom, setChatRoom] = useState("");
 
   useEffect(() => {
     LoadChannelMessages();
@@ -72,9 +73,13 @@ export default function Chat({
     socket = io();
 
     socket.on("connect", () => {
-      socket.emit("join", { username: user.username, channelId: channelId });
+      socket.emit("join", { username: user.id, channelId: channelId });
     });
 
+    socket.on("join", async (data) => {
+      console.log("in front", data);
+      setChatRoom(data[user.id]);
+    });
     // listen for chat events
     socket.on("chat", async (chat) => {
       setMessages((messages) => [...messages, chat]);
@@ -117,6 +122,7 @@ export default function Chat({
             channelId: channelId,
             messageId: messageId,
             messageUserId: messageUserId,
+            room: chatRoom,
           });
         }
       } else {
@@ -125,6 +131,7 @@ export default function Chat({
           message: chatInput,
           userId: user.id,
           channelId: channelId,
+          room: chatRoom,
         });
       }
     }

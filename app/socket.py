@@ -1,9 +1,14 @@
 from flask_socketio import SocketIO, join_room, leave_room
-from flask import request, jsonify
+from flask import request, jsonify, session
+from flask_session import Session
 import os, json
 from .models.db import db, Message, Channel
 from .api.server_routes import get_channel_messages
 
+# from app.__init__ import app
+# from app import app
+
+# Session(app)
 # origins = [
 #     "http://wecord.herokuapp.com/",
 #     "https://wecord.herokuapp.com/"
@@ -20,7 +25,8 @@ else:
 
 # create your SocketIO instance
 socketio = SocketIO(cors_allowed_origins="*", logger=True, engineio_logger=True)
-
+# room = []
+lobby = {}
 # do stuff on connect - I wanna load our messages
 @socketio.on("connect")
 def test_connect():
@@ -37,9 +43,7 @@ def test_disconnect():
 # connect to chat
 @socketio.on("chat")
 def handle_chat(data):
-    # broadcast=True means that all users connected to this chat will see the message
-
-    # add NEW message to the database
+    # global room
     message = Message(
         userId=data["userId"], channelId=data["channelId"], message=data["message"]
     )
@@ -48,13 +52,16 @@ def handle_chat(data):
     db.session.commit()
     new_MessageId = db.session.query(Message).order_by(Message.id.desc()).first()
     data["id"] = new_MessageId.id
-    socketio.emit("chat", data, broadcast=True)
+    # room = session.get("room")
+    print("*******" * 40, data["room"])
+    socketio.emit("chat", data, room=data["room"])
+    # broadcast=True
 
 
 @socketio.on("edit")
 def handle_edit(data):
     # data here is a single message
-
+    global room
     message = Message.query.get(data["messageId"])
 
     # doublecheck that the actual user is editing their own message
@@ -62,7 +69,7 @@ def handle_edit(data):
 
         message.message = data["message"]
         db.session.commit()
-        socketio.emit("edit", data, broadcast=True)
+        socketio.emit("edit", data, room=data["room"])
     else:
         socketio.send({"Only the message author may edit this message"})
 
@@ -70,23 +77,32 @@ def handle_edit(data):
 # join a chatroom
 @socketio.on("join")
 def on_join(data):
-
+    global lobby
     # let's get room name by channelId
     channel = Channel.query.get(data["channelId"])
 
-    username = data["username"]
-    room = channel.title
-    join_room(room)
+    userId = data["username"]
+    # room = channel.title
+    sessionId = request.sid
+    room = data["channelId"]
+
+    lobby[userId] = room
+
+    # join_room(room)
+    join_room(lobby[userId])
+    print("#" * 70, "hit !", room)
+    socketio.emit("join", lobby)
     # to=room means that only someone connected to this room can see what's happening here
-    socketio.send(username + " has entered the room", to=room)
+    socketio.send(userId, " has entered the room")
 
 
 # leave a chatroom
 @socketio.on("leave")
 def on_leave(data):
+    global room
     channel = Channel.query.get(data["channelId"])
 
     username = data["username"]
-    room = channel.title
+    # room = channel.title
     leave_room(room)
     socketio.send(username + " has left the channel.", to=room)

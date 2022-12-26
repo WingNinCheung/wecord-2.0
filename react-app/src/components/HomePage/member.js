@@ -10,9 +10,6 @@ export default function Member({ serverId }) {
 
   if (!serverId) return <p></p>;
 
-  const handleClick = () => {
-    return <User />;
-  };
   return (
     <ul className="memberUl">
       {serverUsers &&
