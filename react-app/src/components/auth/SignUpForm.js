@@ -44,7 +44,7 @@ const SignUpForm = () => {
     }
 
     if (password !== repeatPassword) {
-      errors.push("Password and repear password do not match");
+      errors.push("Password and repeat password do not match");
     }
     if (errors.length) {
       setErrors(errors);
