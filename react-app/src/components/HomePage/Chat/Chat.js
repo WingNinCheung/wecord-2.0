@@ -77,7 +77,6 @@ export default function Chat({
     });
 
     socket.on("join", async (data) => {
-      console.log("in front", data);
       setChatRoom(data[user.id]);
     });
     // listen for chat events
@@ -180,7 +179,7 @@ export default function Chat({
                 ) : (
                   <div></div>
                 )}
-                <div ref={messageEl}></div>
+                <div key={i} ref={messageEl}></div>
               </div>
             ) : (
               <div></div>

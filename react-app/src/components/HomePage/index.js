@@ -41,13 +41,6 @@ function HomePage() {
     allServersArray = Object.values(allServers.allServers);
   }
 
-  if (publicServers) {
-    defaultSelectedServerId = publicServers[0];
-    if (defaultSelectedServerId) {
-      defaultSelectedServerId = defaultSelectedServerId.id;
-    }
-  }
-
   if (allServers.yourServers) {
     privateServers = allServers.yourServers.filter((server) => {
       if (server.private === true) return server;
@@ -273,15 +266,6 @@ function HomePage() {
     }
   }
 
-  if (privateServers) {
-    for (let i = 0; i < privateServers.length; i++) {
-      for (let j = 0; j < allUserArr.length; j++) {
-        if (privateServers[i].name == allUserArr[j].id)
-          privateServers[i]["username"] = allUserArr[j].username;
-      }
-    }
-  }
-
   const LoadChannelMessages = async () => {
     if (goToChannelMessages) {
       if (typeof selectedChannelId !== "string") {
@@ -351,22 +335,6 @@ function HomePage() {
         {isPublic && (
           <div className="publicServers">
             <h3>Servers</h3>
-            {isPublic && (
-              <button
-                className="switchbutton"
-                onClick={() => setIsPublic(!isPublic)}
-              >
-                Friends
-              </button>
-            )}
-            {!isPublic && (
-              <button
-                className="switchbutton"
-                onClick={() => setIsPublic(!isPublic)}
-              >
-                Servers
-              </button>
-            )}
             <ul className="publicServersDisplay">
               <NavLink
                 className="addaserverbutt"
@@ -402,45 +370,6 @@ function HomePage() {
                       </button>
                     </li>
                   </div>
-                ))}
-              {show && <Menu x={location.y} y={location.x} />}
-            </ul>
-          </div>
-        )}
-        {!isPublic && (
-          <div className="privateServers">
-            {isPublic && (
-              <button
-                className="switchbutton"
-                onClick={() => setIsPublic(!isPublic)}
-              >
-                Friends
-              </button>
-            )}
-            <h3>Direct Messages</h3>
-            {!isPublic && (
-              <button
-                className="switchbutton"
-                onClick={() => setIsPublic(!isPublic)}
-              >
-                Servers
-              </button>
-            )}
-            <ul className="privateServersDisplay">
-              {privateServers &&
-                privateServers.map((server) => (
-                  <li
-                    key={server.id}
-                    className="singleServerDisplay"
-                    onClick={() => {
-                      setMainServer(true);
-                      setSelectedServerId(server.id);
-                      setName(server.name);
-                      checkUserinServer(server.id);
-                    }}
-                  >
-                    {server.username}
-                  </li>
                 ))}
               {show && <Menu x={location.y} y={location.x} />}
             </ul>

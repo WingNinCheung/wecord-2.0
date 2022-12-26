@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import "./message.css";
 import "./member.css";
-import User from "../User";
 
 export default function Member({ serverId }) {
   const serverUsers = useSelector((state) => state.serverUsers);
@@ -14,11 +13,9 @@ export default function Member({ serverId }) {
     <ul className="memberUl">
       {serverUsers &&
         Object.values(serverUsers).map((ele) => (
-          <li key={ele.user.id} className="memberli">
-            <NavLink to={`/users/${ele.user.id}`} className="memberli1">
-              {ele.user.username}
-            </NavLink>
-          </li>
+          <div key={ele.user.id} className="memberli">
+            {ele.user.username}
+          </div>
         ))}
     </ul>
   );

@@ -52,10 +52,7 @@ def handle_chat(data):
     db.session.commit()
     new_MessageId = db.session.query(Message).order_by(Message.id.desc()).first()
     data["id"] = new_MessageId.id
-    # room = session.get("room")
-    print("*******" * 40, data["room"])
     socketio.emit("chat", data, room=data["room"])
-    # broadcast=True
 
 
 @socketio.on("edit")
@@ -83,14 +80,10 @@ def on_join(data):
 
     userId = data["username"]
     # room = channel.title
-    sessionId = request.sid
     room = data["channelId"]
-
     lobby[userId] = room
-
     # join_room(room)
     join_room(lobby[userId])
-    print("#" * 70, "hit !", room)
     socketio.emit("join", lobby)
     # to=room means that only someone connected to this room can see what's happening here
     socketio.send(userId, " has entered the room")
@@ -100,8 +93,6 @@ def on_join(data):
 @socketio.on("leave")
 def on_leave(data):
     global room
-    channel = Channel.query.get(data["channelId"])
-
     username = data["username"]
     # room = channel.title
     leave_room(room)

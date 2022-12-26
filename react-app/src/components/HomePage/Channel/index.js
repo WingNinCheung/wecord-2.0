@@ -11,9 +11,9 @@ function Channel(props) {
     props.setGoToChannels(false);
   };
 
-  useEffect(() => {
-    if (props.defaultSelectedServerId) loadChannel();
-  }, [dispatch, props.goToChannel]);
+  // useEffect(() => {
+  //   if (props.defaultSelectedServerId) loadChannel();
+  // }, [dispatch, props.goToChannel]);
 
   const allChannels = useSelector((state) => state.channel);
   const serverChannels = Object.values(allChannels);
