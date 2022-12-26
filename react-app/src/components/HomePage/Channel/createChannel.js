@@ -36,8 +36,8 @@ export default function CreateChannel({ props }) {
   useEffect(() => {
     const errors = [];
 
-    if (title.length > 9) {
-      errors.push("Your name is more than 9 characters long!");
+    if (title.length > 18) {
+      errors.push("Your name is more than 18 characters long!");
     }
     setValidationErrors(errors);
   }, [title]);

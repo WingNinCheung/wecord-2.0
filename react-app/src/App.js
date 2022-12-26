@@ -37,13 +37,6 @@ function App() {
         <NavBar />
       </Switch>
       <Switch>
-        {/* <Route path="/login" exact={true}>
-          <LoginForm />
-        </Route> */}
-        {/* <LoginFormModal /> */}
-        {/* <Route path="/sign-up" exact={true}>
-          <SignUpForm />
-        </Route> */}
         <ProtectedRoute path="/publicservers" exact={true}>
           <UsersList />
         </ProtectedRoute>
@@ -62,9 +55,6 @@ function App() {
         <ProtectedRoute path="/friends" exact={true}>
           <FriendsList />
         </ProtectedRoute>
-        {/* <ProtectedRoute path="/update-server" exact={true}>
-          <EditServerForm />
-        </ProtectedRoute> */}
       </Switch>
     </BrowserRouter>
   );
