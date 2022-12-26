@@ -40,6 +40,10 @@ export default function CreateForm() {
       errors.push("Server name cannot be empty!");
     }
 
+    if (name.length > 22) {
+      errors.push("The name cannot be longer than 22 characters");
+    }
+
     setValidationErrors(errors);
   }, [name]);
 
