@@ -7,10 +7,8 @@ import UsersList from "./components/HomePage/PublicServers/ServerList";
 import HomePage from "./components/HomePage";
 import { authenticate } from "./store/session";
 import CreateForm from "./components/HomePage/createServer";
-
 import CreateChannel from "./components/HomePage/Channel/createChannel";
 import Splash from "./components/Splash/splash";
-import FriendsList from "./components/friends/friends";
 
 function App() {
   const [loaded, setLoaded] = useState(false);
@@ -47,9 +45,6 @@ function App() {
         </ProtectedRoute>
         <ProtectedRoute path="/:serverId/channels/create" exact={true}>
           <CreateChannel />
-        </ProtectedRoute>
-        <ProtectedRoute path="/friends" exact={true}>
-          <FriendsList />
         </ProtectedRoute>
       </Switch>
     </BrowserRouter>

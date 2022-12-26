@@ -54,14 +54,6 @@ const NavBar = () => {
           >
             Discover
           </NavLink>
-          <NavLink
-            id="splash-nav"
-            className="navlink navbarli"
-            activeClassName="active"
-            to="/friends"
-          >
-            My Friends{" "}
-          </NavLink>
           <span className="navbarli">
             <LogoutButton />
           </span>

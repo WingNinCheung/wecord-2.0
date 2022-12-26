@@ -32,19 +32,13 @@ function HomePage() {
     dispatch(getAllServers(loggedInUserId));
   }, [dispatch]);
 
-  // READ ALL PUBLIC AND PRIVATE SERVERS --------
+  // READ ALL PUBLIC SERVERS --------
   const allServers = useSelector((state) => state.servers);
 
-  let publicServers, privateServers, allServersArray, defaultSelectedServerId;
+  let publicServers, allServersArray;
 
   if (allServers.allServers) {
     allServersArray = Object.values(allServers.allServers);
-  }
-
-  if (allServers.yourServers) {
-    privateServers = allServers.yourServers.filter((server) => {
-      if (server.private === true) return server;
-    });
   }
 
   if (allServersArray) {
@@ -57,9 +51,7 @@ function HomePage() {
   const [name, setName] = useState("");
   const [validationErrors, setValidationErrors] = useState([]);
   const [mainServer, setMainServer] = useState(false);
-  const [selectedServerId, setSelectedServerId] = useState(
-    defaultSelectedServerId
-  );
+  const [selectedServerId, setSelectedServerId] = useState();
   const [adminId, setAdminId] = useState();
   const [goToChannel, setGoToChannels] = useState(false);
   const [openChannels, setOpenChannels] = useState(true);
@@ -173,6 +165,7 @@ function HomePage() {
     );
   };
 
+  // Right-click Channel Menu
   const ChannelMenu = ({ x, y }) => {
     return (
       <div
@@ -279,14 +272,14 @@ function HomePage() {
     LoadChannelMessages();
   }, [dispatch, goToChannelMessages]);
 
-  // ------------------------------------------------
-
+  // Allows users to join a server
   const handleJoin = async (e) => {
     e.preventDefault();
     await dispatch(addServerUser(loggedInUserId, selectedServerId));
     checkUserinServer(selectedServerId);
   };
 
+  // Allows users to leave a server
   const handleLeave = async (e) => {
     e.preventDefault();
     setSelectedServerId("");
@@ -397,7 +390,6 @@ function HomePage() {
           channelName={channelName}
           location={location}
           handleJoin={handleJoin}
-          defaultSelectedServerId={defaultSelectedServerId}
           goToChannel={goToChannel}
         />
         {/* ----------channel done ----------*/}
