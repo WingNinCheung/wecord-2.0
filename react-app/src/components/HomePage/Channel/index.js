@@ -28,7 +28,7 @@ function Channel(props) {
           }}
         />
       )}
-      {props.openChannels ? (
+      {props.openChannels && props.selectedServerId ? (
         <div>
           <ul className="channelsDisplay">
             {serverChannels &&

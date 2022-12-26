@@ -267,7 +267,7 @@ function HomePage() {
       }
     }
   };
-
+  console.log("wtf", selectedServerId);
   useEffect(() => {
     LoadChannelMessages();
   }, [dispatch, goToChannelMessages]);
@@ -370,6 +370,7 @@ function HomePage() {
         )}
 
         {/* ----------Here is channel ----------*/}
+
         <Channel
           adminId={adminId}
           loggedInUserId={loggedInUserId}
@@ -392,6 +393,7 @@ function HomePage() {
           handleJoin={handleJoin}
           goToChannel={goToChannel}
         />
+
         {/* ----------channel done ----------*/}
 
         <div className="messagesContainer">
