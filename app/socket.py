@@ -1,6 +1,5 @@
 from flask_socketio import SocketIO, join_room, leave_room
-from flask import request, jsonify, session
-from flask_session import Session
+from flask import request, jsonify
 import os, json
 from .models.db import db, Message, Channel
 from .api.server_routes import get_channel_messages
