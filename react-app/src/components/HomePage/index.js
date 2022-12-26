@@ -32,26 +32,13 @@ function HomePage() {
     dispatch(getAllServers(loggedInUserId));
   }, [dispatch]);
 
-  // READ ALL PUBLIC AND PRIVATE SERVERS --------
+  // READ ALL PUBLIC SERVERS --------
   const allServers = useSelector((state) => state.servers);
 
-  let publicServers, privateServers, allServersArray, defaultSelectedServerId;
+  let publicServers, allServersArray;
 
   if (allServers.allServers) {
     allServersArray = Object.values(allServers.allServers);
-  }
-
-  if (publicServers) {
-    defaultSelectedServerId = publicServers[0];
-    if (defaultSelectedServerId) {
-      defaultSelectedServerId = defaultSelectedServerId.id;
-    }
-  }
-
-  if (allServers.yourServers) {
-    privateServers = allServers.yourServers.filter((server) => {
-      if (server.private === true) return server;
-    });
   }
 
   if (allServersArray) {
@@ -64,9 +51,7 @@ function HomePage() {
   const [name, setName] = useState("");
   const [validationErrors, setValidationErrors] = useState([]);
   const [mainServer, setMainServer] = useState(false);
-  const [selectedServerId, setSelectedServerId] = useState(
-    defaultSelectedServerId
-  );
+  const [selectedServerId, setSelectedServerId] = useState();
   const [adminId, setAdminId] = useState();
   const [goToChannel, setGoToChannels] = useState(false);
   const [openChannels, setOpenChannels] = useState(true);
@@ -180,6 +165,7 @@ function HomePage() {
     );
   };
 
+  // Right-click Channel Menu
   const ChannelMenu = ({ x, y }) => {
     return (
       <div
@@ -273,15 +259,6 @@ function HomePage() {
     }
   }
 
-  if (privateServers) {
-    for (let i = 0; i < privateServers.length; i++) {
-      for (let j = 0; j < allUserArr.length; j++) {
-        if (privateServers[i].name == allUserArr[j].id)
-          privateServers[i]["username"] = allUserArr[j].username;
-      }
-    }
-  }
-
   const LoadChannelMessages = async () => {
     if (goToChannelMessages) {
       if (typeof selectedChannelId !== "string") {
@@ -295,14 +272,14 @@ function HomePage() {
     LoadChannelMessages();
   }, [dispatch, goToChannelMessages]);
 
-  // ------------------------------------------------
-
+  // Allows users to join a server
   const handleJoin = async (e) => {
     e.preventDefault();
     await dispatch(addServerUser(loggedInUserId, selectedServerId));
     checkUserinServer(selectedServerId);
   };
 
+  // Allows users to leave a server
   const handleLeave = async (e) => {
     e.preventDefault();
     setSelectedServerId("");
@@ -351,22 +328,6 @@ function HomePage() {
         {isPublic && (
           <div className="publicServers">
             <h3>Servers</h3>
-            {isPublic && (
-              <button
-                className="switchbutton"
-                onClick={() => setIsPublic(!isPublic)}
-              >
-                Friends
-              </button>
-            )}
-            {!isPublic && (
-              <button
-                className="switchbutton"
-                onClick={() => setIsPublic(!isPublic)}
-              >
-                Servers
-              </button>
-            )}
             <ul className="publicServersDisplay">
               <NavLink
                 className="addaserverbutt"
@@ -407,45 +368,6 @@ function HomePage() {
             </ul>
           </div>
         )}
-        {!isPublic && (
-          <div className="privateServers">
-            {isPublic && (
-              <button
-                className="switchbutton"
-                onClick={() => setIsPublic(!isPublic)}
-              >
-                Friends
-              </button>
-            )}
-            <h3>Direct Messages</h3>
-            {!isPublic && (
-              <button
-                className="switchbutton"
-                onClick={() => setIsPublic(!isPublic)}
-              >
-                Servers
-              </button>
-            )}
-            <ul className="privateServersDisplay">
-              {privateServers &&
-                privateServers.map((server) => (
-                  <li
-                    key={server.id}
-                    className="singleServerDisplay"
-                    onClick={() => {
-                      setMainServer(true);
-                      setSelectedServerId(server.id);
-                      setName(server.name);
-                      checkUserinServer(server.id);
-                    }}
-                  >
-                    {server.username}
-                  </li>
-                ))}
-              {show && <Menu x={location.y} y={location.x} />}
-            </ul>
-          </div>
-        )}
 
         {/* ----------Here is channel ----------*/}
         <Channel
@@ -468,7 +390,6 @@ function HomePage() {
           channelName={channelName}
           location={location}
           handleJoin={handleJoin}
-          defaultSelectedServerId={defaultSelectedServerId}
           goToChannel={goToChannel}
         />
         {/* ----------channel done ----------*/}
