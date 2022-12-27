@@ -144,7 +144,7 @@ def handle_chat(data):
     socketio.emit("chat", data, room=data["room"])
 ```
 
-### Automatic Scroll Down to the Bottom on Chat
+### Automatic Scroll Down to the Bottom in Chat
 
 - The chat feed automatically scrolls to the bottom when a new message is sent/received using **useRef** hook.
 - Users do not need to scroll down to look for new messages.
