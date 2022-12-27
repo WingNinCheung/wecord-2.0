@@ -193,7 +193,7 @@ messages.map((message, i) =>
 ## Technical Challenges
 <a href="https://github.com/WingNinCheung/Wecord">Wecord</a> brought many challenges to my team, primarily implementing web sockets. We did implement the live chat, but it caused a lot of bugs on editing and deleting messages. **We decided to remove the live chat feature from Wecord.**
 
-For<a href="https://wecord-2.onrender.com">Wecord 2.0</a>, I faced many challengings on creating chat rooms. One of the blocks was everytime when a user clicked a channel(A), the room was assigned. But when another users clicked a different channel(B), the room was assigned again. When the first user sent a message in channel A, the message wasn't shown in channel A but channel B.
+For <a href="https://wecord-2.onrender.com">Wecord 2.0</a>, I faced many challengings on creating chat rooms. One of the blocks was everytime when a user clicked a channel(A), the room was assigned. But when another users clicked a different channel(B), the room was assigned again. When the first user sent a message in channel A, the message wasn't shown in channel A but channel B.
 
 I solved this issue by using a lobby object that contains the user'id as the key and room (channel's id) as the value. Everytime when a user clicks a channel, it will search on the lobby object with the user's id and assign the selected channel's id to room. The lobby will look like:
 ```
