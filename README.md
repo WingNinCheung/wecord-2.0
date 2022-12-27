@@ -8,6 +8,10 @@ Live site: <a href="https://wecord-2.onrender.com">Wecord 2.0</a>
 
 Documentation: <a href="https://github.com/WingNinCheung/wecord-2.0/wiki">Wiki</a>
 
+**To edit and delete servers and channels, please right click on them to see the options**
+
+![Screen Shot 2022-12-26 at 5 16 19 PM](https://user-images.githubusercontent.com/96600317/209596207-e4ceed60-3572-4c0f-9ccc-0a08f76cfb38.png)
+
 ## Technologies used
 
 ### Frontend
