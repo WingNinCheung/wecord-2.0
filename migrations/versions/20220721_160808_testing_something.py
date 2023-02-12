@@ -65,7 +65,7 @@ def upgrade():
         sa.PrimaryKeyConstraint("id", "userId", "serverId"),
     )
     if environment == "production":
-        op.execute(f"ALTER TABLE server_users SET SCHEMA {SCHEMA};")
+        op.execute(f"ALTER TABLE serverusers SET SCHEMA {SCHEMA};")
 
     op.create_table(
         "messages",
