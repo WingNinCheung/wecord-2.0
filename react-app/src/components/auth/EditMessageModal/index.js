@@ -15,9 +15,6 @@ function EditFormModal({
 
   return (
     <>
-      {/* <button className="login-button" onClick={() => setShowModal(true)}>
-        Edit
-      </button> */}
       {1 && (
         <Modal onClose={() => setShowModal(false)}>
           <EditMessageForm

@@ -10,7 +10,7 @@ import {
 import { getChannelMessagesThunk } from "../../store/messages";
 
 import Channel from "./Channel/index";
-
+import FeatureModel from "../auth/FeatureModal";
 import {
   getAllServerUsers,
   addServerUser,
@@ -26,6 +26,15 @@ function HomePage() {
   const dispatch = useDispatch();
   const sessionUser = useSelector((state) => state.session.user);
   const loggedInUserId = sessionUser.id;
+  const [showFeature, setShowFeature] = useState(true);
+
+  useEffect(() => {
+    if (showFeature && !localStorage.getItem("modalDisplayed")) {
+      localStorage.setItem("modalDisplayed", true);
+    } else {
+      setShowFeature(false);
+    }
+  }, []);
 
   useEffect(() => {
     dispatch(getAllUsers());
@@ -63,7 +72,6 @@ function HomePage() {
 
   // true if we are in public view. false if we are looking @ private servers
   const [isPublic, setIsPublic] = useState(true);
-  const history = useHistory();
 
   // right-click menu section
   const [show, setShow] = useState(false);
@@ -267,7 +275,7 @@ function HomePage() {
       }
     }
   };
-  console.log("wtf", selectedServerId);
+
   useEffect(() => {
     LoadChannelMessages();
   }, [dispatch, goToChannelMessages]);
@@ -290,6 +298,11 @@ function HomePage() {
 
   return (
     <div>
+      {showFeature ? (
+        <FeatureModel setShowFeature={setShowFeature} />
+      ) : (
+        <div></div>
+      )}
       <div className="updateServerForm">
         {edit && (
           <div>
@@ -323,7 +336,6 @@ function HomePage() {
           </div>
         )}
       </div>
-
       <div className="outContainer">
         {isPublic && (
           <div className="publicServers">

@@ -137,7 +137,6 @@ export default function Chat({
     setOpenEditForm(false);
     setChatInput("");
   };
-
   return (
     <div className="innerMsg">
       <div className="messagesDisplay">
@@ -152,7 +151,7 @@ export default function Chat({
                 <div className="msg-body">
                   <span className="message">{message.message}</span>
                 </div>
-                {message.userId === user.id ? (
+                {message.userId === user.id || user.username === "admin" ? (
                   <div className="edit-del">
                     <span
                       onClick={() => {
