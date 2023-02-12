@@ -47,25 +47,25 @@ def upgrade():
     if environment == "production":
         op.execute(f"ALTER TABLE channels SET SCHEMA {SCHEMA};")
 
-    op.create_table(
-        "serverusers",
-        sa.Column("id", sa.Integer(), nullable=False),
-        sa.Column("userId", sa.Integer(), nullable=False),
-        sa.Column("serverId", sa.Integer(), nullable=False),
-        sa.Column("adminStatus", sa.Boolean(), nullable=True),
-        sa.Column("muted", sa.Boolean(), nullable=True),
-        sa.ForeignKeyConstraint(
-            ["serverId"],
-            ["servers.id"],
-        ),
-        sa.ForeignKeyConstraint(
-            ["userId"],
-            ["users.id"],
-        ),
-        sa.PrimaryKeyConstraint("id", "userId", "serverId"),
-    )
-    if environment == "production":
-        op.execute(f"ALTER TABLE serverusers SET SCHEMA {SCHEMA};")
+    # op.create_table(
+    #     "serverusers",
+    #     sa.Column("id", sa.Integer(), nullable=False),
+    #     sa.Column("userId", sa.Integer(), nullable=False),
+    #     sa.Column("serverId", sa.Integer(), nullable=False),
+    #     sa.Column("adminStatus", sa.Boolean(), nullable=True),
+    #     sa.Column("muted", sa.Boolean(), nullable=True),
+    #     sa.ForeignKeyConstraint(
+    #         ["serverId"],
+    #         ["servers.id"],
+    #     ),
+    #     sa.ForeignKeyConstraint(
+    #         ["userId"],
+    #         ["users.id"],
+    #     ),
+    #     sa.PrimaryKeyConstraint("id", "userId", "serverId"),
+    # )
+    # if environment == "production":
+    #     op.execute(f"ALTER TABLE serverusers SET SCHEMA {SCHEMA};")
 
     op.create_table(
         "messages",
