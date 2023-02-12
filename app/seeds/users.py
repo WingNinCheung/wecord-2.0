@@ -5,17 +5,18 @@ from ..models.db import db, Server, Channel, Message
 # Adds a demo user, you can add other users here if you want
 def seed_users():
     demo = User(
-        username='Demo', email='demo@aa.io', password='password', photo="https://pbs.twimg.com/profile_images/664169149002874880/z1fmxo00_400x400.jpg")
+        username='Demo', email='demo@aa.io', password='password')
     marnie = User(
         username='marnie', email='marnie@aa.io', password='password')
     bobbie = User(
         username='bobbie', email='bobbie@aa.io', password='password')
-
-
+    admin = User(
+        username='admin', email='admin@gmail.com', password='admin')
 
     db.session.add(demo)
     db.session.add(marnie)
     db.session.add(bobbie)
+    db.session.add(admin)
 
     db.session.commit()
 

@@ -9,36 +9,10 @@ def seed_server_users():
         serverId = 1, userId = 2, adminStatus = False, muted = False )
     server_users3 = Server_User(
         serverId = 1, userId = 3, adminStatus = False, muted = False )
-    server_users4 = Server_User(
-        serverId = 2, userId = 1, adminStatus = True, muted = False )
-    server_users5 = Server_User(
-        serverId = 2, userId = 2, adminStatus = False, muted = False )
-    server_users6 = Server_User(
-        serverId = 3, userId = 1, adminStatus = True, muted = False )
-    
-    server_users10 = Server_User(
-        serverId = 4, userId = 2, adminStatus = True, muted = False )
-    server_users11 = Server_User(
-        serverId = 4, userId = 3, adminStatus = False, muted = False )
-    server_users12 = Server_User(
-        serverId = 5, userId = 3, adminStatus = True, muted = False )
-
-
-
-
 
     db.session.add(server_users2)
     db.session.add(server_users1)
     db.session.add(server_users3)
-    db.session.add(server_users4)
-    db.session.add(server_users5)
-    db.session.add(server_users6)
-
-    db.session.add(server_users10)
-    db.session.add(server_users11)
-    db.session.add(server_users12)
-
-
     db.session.commit()
 
 

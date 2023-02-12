@@ -1,5 +1,5 @@
 import "./HomePage.css";
-export default function FeatureList({ setShowModal, setShowFeature }) {
+export default function FeatureList({ setShowFeature }) {
   const handleDone = (e) => {
     e.preventDefault();
     setShowFeature(false);
